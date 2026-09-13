@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Громобой Коротконогий — Лист персонажа</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    body {
+        font-family: system-ui, -apple-system, sans-serif;
+        background: #05080a;
+        color: #e5e7eb;
+        margin: 0;
+        padding: 10px;
+    }
+    .sheet {
+        max-width: 800px;
+        margin: 0 auto;
+        background: #111827;
+        border-radius: 12px;
+        padding: 12px;
+        border: 1px solid #1f2937;
+    }
+    h1 { margin: 0 0 4px 0; }
+    .subtitle { font-size: 0.9em; color: #9ca3af; margin-bottom: 8px; }
+
+    .tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        margin-bottom: 8px;
+    }
+    .tab-btn {
+        flex: 1 1 90px;
+        background: #7c2d12;
+        border: 1px solid #f97316;
+        color: #ffedd5;
+        padding: 4px 6px;
+        border-radius: 999px;
+        cursor: pointer;
+        font-size: 0.85em;
+        text-align: center;
+    }
+    .tab-btn.active {
+        background: #f97316;
+        color: #1b0b0b;
+    }
+    .tab-content { display: none; margin-top: 8px; }
+    .tab-content.active { display: block; }
+
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .card {
+        flex: 1 1 240px;
+        background: #020617;
+        border-radius: 8px;
+        padding: 8px;
+        border: 1px solid #1f2937;
+    }
+
+    .photo-block img {
+        width: 100%;
+        height: auto;
+        max-height: 220px;
+        object-fit: cover;
+        border-radius: 6px;
+        border: 1px solid #f97316;
+    }
+    .photo-input {
+        width: 100%;
+        background: #020617;
+        border: 1px solid #334155;
+        border-radius: 4px;
+        padding: 4px;
+        color: #e5e7eb;
+        margin-top: 6px;
+        font-size: 0.8em;
+    }
+
+    .stat-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.9em;
+    }
+    .counter { font-size: 1.1em; font-weight: bold; }
+
+    button {
+        background: #f97316;
+        border: none;
+        color: #1b0b0b;
+        padding: 3px 6px;
+        margin: 0 2px 2px 0;
+        border-radius: 999px;
+        cursor: pointer;
+        font-size: 0.8em;
+    }
+    button:disabled {
+        background: #4b5563;
+        color: #9ca3af;
+        cursor: default;
+    }
+
+    .bar {
+        position: relative;
+        height: 12px;
+        background: #020617;
+        border-radius: 999px;
+        overflow: hidden;
+        margin-top: 4px;
+        border: 1px solid #1f2937;
+    }
+    .bar-fill { height: 100%; width: 100%; }
+    .hp { background: linear-gradient(90deg, #ef4444, #b91c1c); }
+    .mp { background: linear-gradient(90deg, #3b82f6, #1d4ed8); }
+
+    .ability {
+        background: #0f172a;
+        padding: 6px;
+        border-radius: 6px;
+        margin-bottom: 6px;
+        border: 1px solid #1f2937;
+        font-size: 0.85em;
+    }
+    .ability-title {
+        font-weight: bold;
+        color: #fcd34d;
+        margin-bottom: 4px;
+    }
+    .cooldown {
+        font-size: 0.75em;
+        color: #9ca3af;
+        margin-top: 2px;
+    }
+
+    .buff {
+        background: #0f172a;
+        padding: 6px;
+        border-radius: 6px;
+        margin-bottom: 4px;
+        cursor: pointer;
+        border: 1px solid #1f2937;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.85em;
+    }
+    .buff-name { font-weight: bold; color: #fed7aa; }
+    .buff.active {
+        background: #7c2d12;
+        border-color: #f97316;
+    }
+
+    textarea {
+        width: 100%;
+        background: #020617;
+        border: 1px solid #334155;
+        border-radius: 6px;
+        color: #e5e7eb;
+        padding: 6px;
+        resize: vertical;
+        min-height: 70px;
+        font-size: 0.85em;
+    }
+
+    @media (max-width: 600px) {
+        .card { flex: 1 1 100%; }
+        .tab-btn { flex: 1 1 45%; }
+    }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+    <h1>Громобой Коротконогий</h1>
+    <div class="subtitle">Полурослик-варвар, громкий, коренастый, но свой парень.</div>
+
+    <div class="tabs">
+        <button type="button" class="tab-btn active" data-tab="stats">⚔️ Статы</button>
+        <button type="button" class="tab-btn" data-tab="inventory">🎒 Инвентарь</button>
+        <button type="button" class="tab-btn" data-tab="abilities">💥 Способности</button>
+        <button type="button" class="tab-btn" data-tab="buffs">✨ Баффы</button>
+        <button type="button" class="tab-btn" data-tab="story">📖 История</button>
+    </div>
+
+    <!-- СТАТЫ -->
+    <div id="tab-stats" class="tab-content active">
+        <div class="row">
+            <div class="card photo-block">
+                <h2>Фото</h2>
+                <img id="charPhoto" src="https://i.imgur.com/4ZQZ4Zy.jpeg" alt="Громобой">
+                <input class="photo-input" id="photoURL" placeholder="URL изображения" oninput="updatePhoto()">
+            </div>
+
+            <div class="card">
+                <div class="stat-header">
+                    <h2>HP</h2>
+                    <div class="counter" id="hpCounter">40 / 40</div>
+                </div>
+                <div class="bar"><div class="bar-fill hp" id="hpBar"></div></div>
+                <button onclick="changeHP(-5)">-5</button>
+                <button onclick="changeHP(-1)">-1</button>
+                <button onclick="changeHP(1)">+1</button>
+                <button onclick="changeHP(5)">+5</button>
+            </div>
+
+            <div class="card">
+                <div class="stat-header">
+                    <h2>Ярость</h2>
+                    <div class="counter" id="mpCounter">12 / 12</div>
+                </div>
+                <div class="bar"><div class="bar-fill mp" id="mpBar"></div></div>
+                <button onclick="changeMP(-3)">-3</button>
+                <button onclick="changeMP(-1)">-1</button>
+                <button onclick="changeMP(1)">+1</button>
+                <button onclick="changeMP(3)">+3</button>
+            </div>
+
+            <div class="card">
+                <h2>Данные</h2>
+                <ul style="padding-left:18px;font-size:0.85em;">
+                    <li><strong>Раса:</strong> Полурослик</li>
+                    <li><strong>Класс:</strong> Варвар</li>
+                    <li><strong>Уровень:</strong> 3</li>
+                    <li><strong>Происхождение:</strong> Тихие Холмы</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="card" style="flex:100%">
+                <h2>Заметки</h2>
+                <textarea id="notes"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <!-- ИНВЕНТАРЬ -->
+    <div id="tab-inventory" class="tab-content">
+        <div class="row">
+            <div class="card" style="flex:100%">
+                <h2>Инвентарь</h2>
+                <ul style="padding-left:18px;font-size:0.85em;">
+                    <li><strong>Топор «Громушка»</strong> — 1d8 рубящий.</li>
+                    <li><strong>Пояс Ярости</strong> — +1 к силе.</li>
+                    <li><strong>Кружка «Пенная Угроза»</strong> — 1d4 дробящий.</li>
+                    <li><strong>Сухарики</strong> — 1d4 HP.</li>
+                    <li><strong>Камень «На удачу»</strong> — бросок 1d6 по врагу.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- СПОСОБНОСТИ -->
+    <div id="tab-abilities" class="tab-content">
+        <div class="row">
+            <div class="card" style="flex:100%">
+                <h2>Способности</h2>
+
+                <div class="ability" id="ab1">
+                    <div class="ability-title">Бочонок Ярости</div>
+                    <p>Берсерк на 2 раунда: +2 к урону ближнего боя, +1 к боевому духу союзников.</p>
+                    <p><strong>Стоимость:</strong> 3 ярости, <strong>КД:</strong> 2 раунда</p>
+                    <button id="btn1" onclick="useAbility(1)">Использовать</button>
+                    <div class="cooldown" id="cd1"></div>
+                </div>
+
+                <div class="ability" id="ab2">
+                    <div class="ability-title">Громовой Удар</div>
+                    <p>1d10 рубящего урона, союзники получают +1 к следующей атаке.</p>
+                    <p><strong>Стоимость:</strong> 2 ярости, <strong>КД:</strong> 1 раунд</p>
+                    <button id="btn2" onclick="useAbility(2)">Использовать</button>
+                    <div class="cooldown" id="cd2"></div>
+                </div>
+
+                <div class="ability" id="ab3">
+                    <div class="ability-title">Коротконогий Разгон</div>
+                    <p>1d8 дробящего, враг проходит проверку Телосложения или падает.</p>
+                    <p><strong>Стоимость:</strong> 1 ярость, <strong>КД:</strong> 1 раунд</p>
+                    <button id="btn3" onclick="useAbility(3)">Использовать</button>
+                    <div class="cooldown" id="cd3"></div>
+                </div>
+
+                <div class="ability" id="ab4">
+                    <div class="ability-title">Боевой Рёв «ДА Я СПОКОЕН!»</div>
+                    <p>Враги: -1 к атаке, союзники: +1 к инициативе.</p>
+                    <p><strong>Стоимость:</strong> 2 ярости, <strong>КД:</strong> 3 раунда</p>
+                    <button id="btn4" onclick="useAbility(4)">Использовать</button>
+                    <div class="cooldown" id="cd4"></div>
+                </div>
+
+                <button style="margin-top:6px;width:100%" onclick="nextRound()">Раунд +1 (уменьшить КД)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- БАФФЫ -->
+    <div id="tab-buffs" class="tab-content">
+        <div class="row">
+            <div class="card" style="flex:100%">
+                <h2>Баффы</h2>
+                <div class="buff" onclick="toggleBuff(this)">
+                    <div><span class="buff-name">Боевой дух</span> — +1 к урону.</div>
+                </div>
+                <div class="buff" onclick="toggleBuff(this)">
+                    <div><span class="buff-name">Громогласность</span> — враги пугаются.</div>
+                </div>
+                <div class="buff" onclick="toggleBuff(this)">
+                    <div><span class="buff-name">Уверенность</span> — +1 к силе.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ИСТОРИЯ -->
+    <div id="tab-story" class="tab-content">
+        <div class="row">
+            <div class="card" style="flex:100%">
+                <h2>История</h2>
+                <p style="font-size:0.85em;">
+                    Громобой родился в Тихих Холмах и сразу сделал их громкими. Кричал так, что коровы
+                    переставали давать молоко, а петухи пересматривали график.
+                </p>
+                <p style="font-size:0.85em;">
+                    В детстве он был коренастым, шумным и уверенным. На фразу «ты маленький» отвечал:
+                    «Я не маленький, я компактный!».
+                </p>
+                <p style="font-size:0.85em;">
+                    Однажды он напугал медведя смехом, спорил с рекой и выиграл, перепугал собственную тень.
+                    После этого решил, что его путь — варвар.
+                </p>
+                <p style="font-size:0.85em;">
+                    Теперь он путешествует с отрядом, орёт на врагов, вдохновляет друзей и всегда готов сказать:
+                    «Я не ору, я просто громко выражаю мнение!».
+                </p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Вкладки (iPhone-friendly)
+    const tabButtons = document.querySelectorAll(".tab-btn");
+    const tabContents = {
+        stats: document.getElementById("tab-stats"),
+        inventory: document.getElementById("tab-inventory"),
+        abilities: document.getElementById("tab-abilities"),
+        buffs: document.getElementById("tab-buffs"),
+        story: document.getElementById("tab-story")
+    };
+
+    function switchTab(e) {
+        e.preventDefault();
+        const tab = this.getAttribute("data-tab");
+        tabButtons.forEach(b => b.classList.remove("active"));
+        this.classList.add("active");
+        Object.keys(tabContents).forEach(key => {
+            tabContents[key].classList.toggle("active", key === tab);
+        });
+    }
+
+    tabButtons.forEach(btn => {
+        btn.setAttribute("type", "button");
+        btn.addEventListener("touchstart", switchTab, { passive: false });
+        btn.addEventListener("click", switchTab);
+    });
+
+    // Фото
+    function updatePhoto() {
+        const url = document.getElementById('photoURL').value.trim();
+        if (url.length > 5) document.getElementById('charPhoto').src = url;
+    }
+
+    // HP
+    let hpCurrent = 40, hpMax = 40;
+    function updateHP() {
+        document.getElementById('hpCounter').textContent = hpCurrent + " / " + hpMax;
+        document.getElementById('hpBar').style.width = (hpCurrent / hpMax * 100) + "%";
+    }
+    function changeHP(d) {
+        hpCurrent = Math.max(0, Math.min(hpMax, hpCurrent + d));
+        updateHP();
+    }
+    updateHP();
+
+    // MP
+    let mpCurrent = 12, mpMax = 12;
+    function updateMP() {
+        document.getElementById('mpCounter').textContent = mpCurrent + " / " + mpMax;
+        document.getElementById('mpBar').style.width = (mpCurrent / mpMax * 100) + "%";
+    }
+    function changeMP(d) {
+        mpCurrent = Math.max(0, Math.min(mpMax, mpCurrent + d));
+        updateMP();
+    }
+    updateMP();
+
+    // Способности
+    const abilities = {
+        1: { cost: 3, cd: 2, timer: 0 },
+        2: { cost: 2, cd: 1, timer: 0 },
+        3: { cost: 1, cd: 1, timer: 0 },
+        4: { cost: 2, cd: 3, timer: 0 }
+    };
+
+    function useAbility(id) {
+        const ab = abilities[id];
+        if (ab.timer > 0) return;
+        if (mpCurrent < ab.cost) return;
+        mpCurrent -= ab.cost;
+        updateMP();
+        ab.timer = ab.cd;
+        const btn = document.getElementById('btn' + id);
+        const cdLabel = document.getElementById('cd' + id);
+        btn.disabled = true;
+        cdLabel.textContent = "КД: " + ab.timer + " раунд(ов)";
+    }
+
+    function nextRound() {
+        Object.keys(abilities).forEach(key => {
+            const id = parseInt(key);
+            const ab = abilities[id];
+            if (ab.timer > 0) {
+                ab.timer -= 1;
+                const btn = document.getElementById('btn' + id);
+                const cdLabel = document.getElementById('cd' + id);
+                if (ab.timer <= 0) {
+                    ab.timer = 0;
+                    btn.disabled = false;
+                    cdLabel.textContent = "Готово";
+                } else {
+                    cdLabel.textContent = "КД: " + ab.timer + " раунд(ов)";
+                }
+            }
+        });
+    }
+
+    // Баффы
+    function toggleBuff(el) {
+        el.classList.toggle("active");
+    }
+</script>
+</body>
+</html>
