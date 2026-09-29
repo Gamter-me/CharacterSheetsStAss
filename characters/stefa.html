@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Мира Сонная — Лист персонажа</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    body {
+        font-family: system-ui, -apple-system, sans-serif;
+        background: #0f0a14;
+        color: #e5e7eb;
+        margin: 0;
+        padding: 10px;
+    }
+    .sheet {
+        max-width: 800px;
+        margin: 0 auto;
+        background: #1a1226;
+        border-radius: 12px;
+        padding: 12px;
+        border: 1px solid #7e22ce;
+    }
+    h1 { margin: 0 0 4px 0; }
+    .subtitle { font-size: 0.9em; color: #f9a8d4; margin-bottom: 8px; }
+
+    .tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        margin-bottom: 8px;
+    }
+    .tab-btn {
+        flex: 1 1 90px;
+        background: #581c87;
+        border: 1px solid #e879f9;
+        color: #fae8ff;
+        padding: 4px 6px;
+        border-radius: 999px;
+        cursor: pointer;
+        font-size: 0.85em;
+        text-align: center;
+    }
+    .tab-btn.active {
+        background: #e879f9;
+        color: #2e0a3d;
+    }
+    .tab-content { display: none; margin-top: 8px; }
+    .tab-content.active { display: block; }
+
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .card {
+        flex: 1 1 240px;
+        background: #0c0616;
+        border-radius: 8px;
+        padding: 8px;
+        border: 1px solid #7e22ce;
+    }
+
+    .photo-block img {
+        width: 100%;
+        height: auto;
+        max-height: 220px;
+        object-fit: cover;
+        border-radius: 6px;
+        border: 1px solid #e879f9;
+    }
+    .photo-input {
+        width: 100%;
+        background: #0c0616;
+        border: 1px solid #334155;
+        border-radius: 4px;
+        padding: 4px;
+        color: #e5e7eb;
+        margin-top: 6px;
+        font-size: 0.8em;
+    }
+
+    .stat-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.9em;
+    }
+    .counter { font-size: 1.1em; font-weight: bold; }
+
+    button {
+        background: #e879f9;
+        border: none;
+        color: #2e0a3d;
+        padding: 3px 6px;
+        margin: 0 2px 2px 0;
+        border-radius: 999px;
+        cursor: pointer;
+        font-size: 0.8em;
+    }
+    button:disabled {
+        background: #4b5563;
+        color: #9ca3af;
+        cursor: default;
+    }
+
+    .bar {
+        position: relative;
+        height: 12px;
+        background: #0c0616;
+        border-radius: 999px;
+        overflow: hidden;
+        margin-top: 4px;
+        border: 1px solid #7e22ce;
+    }
+    .bar-fill { height: 100%; width: 100%; }
+    .hp { background: linear-gradient(90deg, #ef4444, #b91c1c); }
+    .mp { background: linear-gradient(90deg, #f9a8d4, #a855f7); }
+
+    .ability {
+        background: #150a20;
+        padding: 6px;
+        border-radius: 6px;
+        margin-bottom: 6px;
+        border: 1px solid #7e22ce;
+        font-size: 0.85em;
+    }
+    .ability-title {
+        font-weight: bold;
+        color: #f9a8d4;
+        margin-bottom: 4px;
+    }
+    .cooldown {
+        font-size: 0.75em;
+        color: #e9d5ff;
+        margin-top: 2px;
+    }
+
+    .buff {
+        background: #150a20;
+        padding: 6px;
+        border-radius: 6px;
+        margin-bottom: 4px;
+        cursor: pointer;
+        border: 1px solid #7e22ce;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.85em;
+    }
+    .buff-name { font-weight: bold; color: #fbcfe8; }
+    .buff.active {
+        background: #581c87;
+        border-color: #e879f9;
+    }
+
+    .quick-stats {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        margin-top: 6px;
+    }
+    .quick-stat {
+        flex: 1 1 28%;
+        background: #2a1340;
+        border: 1px solid #a855f7;
+        border-radius: 6px;
+        padding: 3px 4px;
+        text-align: center;
+        font-size: 0.75em;
+    }
+    .quick-stat .qs-name {
+        color: #e9d5ff;
+        display: block;
+        font-size: 0.85em;
+    }
+    .quick-stat .qs-val {
+        font-weight: bold;
+        font-size: 1.15em;
+        color: #f9a8d4;
+    }
+
+    textarea {
+        width: 100%;
+        background: #0c0616;
+        border: 1px solid #334155;
+        border-radius: 6px;
+        color: #e5e7eb;
+        padding: 6px;
+        resize: vertical;
+        min-height: 70px;
+        font-size: 0.85em;
+    }
+
+    @media (max-width: 600px) {
+        .card { flex: 1 1 100%; }
+        .tab-btn { flex: 1 1 45%; }
+        .quick-stat { flex: 1 1 30%; }
+    }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+    <h1>Мира Сонная</h1>
+    <div class="subtitle">Фирболг-друид. Настолько спокойная, что рядом с ней всем становится хорошо. Говорит в основном «ммм».</div>
+
+    <div class="tabs">
+        <button type="button" class="tab-btn active" data-tab="stats">⚔️ Статы</button>
+        <button type="button" class="tab-btn" data-tab="inventory">🎒 Инвентарь</button>
+        <button type="button" class="tab-btn" data-tab="abilities">💥 Способности</button>
+        <button type="button" class="tab-btn" data-tab="buffs">✨ Баффы</button>
+        <button type="button" class="tab-btn" data-tab="story">📖 История</button>
+    </div>
+
+    <!-- СТАТЫ -->
+    <div id="tab-stats" class="tab-content active">
+        <div class="row">
+            <div class="card photo-block">
+                <h2>Фото</h2>
+                <img id="charPhoto" src="https://picsum.photos/seed/mira/600/400" alt="Мира">
+                <input class="photo-input" id="photoURL" placeholder="URL изображения" oninput="updatePhoto()">
+            </div>
+
+            <div class="card">
+                <div class="stat-header">
+                    <h2>HP</h2>
+                    <div class="counter" id="hpCounter">22 / 22</div>
+                </div>
+                <div class="bar"><div class="bar-fill hp" id="hpBar"></div></div>
+                <button onclick="changeHP(-5)">-5</button>
+                <button onclick="changeHP(-1)">-1</button>
+                <button onclick="changeHP(1)">+1</button>
+                <button onclick="changeHP(5)">+5</button>
+            </div>
+
+            <div class="card">
+                <div class="stat-header">
+                    <h2>Ячейки</h2>
+                    <div class="counter" id="mpCounter">4 / 4</div>
+                </div>
+                <div class="bar"><div class="bar-fill mp" id="mpBar"></div></div>
+                <button onclick="changeMP(-3)">-3</button>
+                <button onclick="changeMP(-1)">-1</button>
+                <button onclick="changeMP(1)">+1</button>
+                <button onclick="changeMP(3)">+3</button>
+            </div>
+
+            <div class="card">
+                <h2>Данные</h2>
+                <ul style="padding-left:18px;font-size:0.85em;margin:4px 0;">
+                    <li><strong>Раса:</strong> Фирболг</li>
+                    <li><strong>Класс:</strong> Друид (Круг Снов)</li>
+                    <li><strong>Уровень:</strong> 3</li>
+                    <li><strong>Происхождение:</strong> Долина Тёплого Мха</li>
+                </ul>
+
+                <h3 style="margin:8px 0 4px 0;font-size:0.9em;color:#e9d5ff;">Характеристики</h3>
+                <div class="quick-stats">
+                    <div class="quick-stat">
+                        <span class="qs-name">💪 Сила</span>
+                        <span class="qs-val">10 (+0)</span>
+                    </div>
+                    <div class="quick-stat">
+                        <span class="qs-name">🤸 Ловк</span>
+                        <span class="qs-val">12 (+1)</span>
+                    </div>
+                    <div class="quick-stat">
+                        <span class="qs-name">🛡 Тел</span>
+                        <span class="qs-val">15 (+2)</span>
+                    </div>
+                    <div class="quick-stat">
+                        <span class="qs-name">📚 Инт</span>
+                        <span class="qs-val">12 (+1)</span>
+                    </div>
+                    <div class="quick-stat">
+                        <span class="qs-name">👀 Мдр</span>
+                        <span class="qs-val">17 (+3)</span>
+                    </div>
+                    <div class="quick-stat">
+                        <span class="qs-name">😎 Хар</span>
+                        <span class="qs-val">12 (+1)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Характеристики (подробно)</h3>
+            <ul>
+                <li><strong>💪 Сила:</strong> 10 (+0) — «Ммм... нет, спасибо.»</li>
+                <li><strong>🤸 Ловкость:</strong> 12 (+1) — двигается плавно, будто во сне</li>
+                <li><strong>🛡 Телосложение:</strong> 15 (+2) — «Ммм. Я в порядке.»</li>
+                <li><strong>📚 Интеллект:</strong> 12 (+1) — соображает, просто не спешит с выводами</li>
+                <li><strong>👀 Мудрость:</strong> 17 (+3) — чувствует всё. Просто не говорит.</li>
+                <li><strong>😎 Харизма:</strong> 12 (+1) — обаятельная без слов</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h3>Боевые показатели</h3>
+            <ul>
+                <li><strong>🛡 Броня:</strong> 13 (кожа + ловкость)</li>
+                <li><strong>⚡ Инициатива:</strong> +1 — «Ммм, я подожду.»</li>
+                <li><strong>🏃 Скорость:</strong> 9 м (мягкий, неторопливый шаг)</li>
+                <li><strong>🎯 Бонус мастерства:</strong> +2</li>
+                <li><strong>👁 Пассивная внимательность:</strong> 15</li>
+            </ul>
+        </div>
+
+        <div class="row">
+            <div class="card" style="flex:100%">
+                <h2>Заметки</h2>
+                <textarea id="notes"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <!-- ИНВЕНТАРЬ -->
+    <div id="tab-inventory" class="tab-content">
+        <div class="row">
+            <div class="card" style="flex:100%">
+                <h2>Инвентарь</h2>
+                <ul style="padding-left:18px;font-size:0.85em;">
+                    <li><strong>Посох «Ветка»</strong> — 1d6 дробящий. На нём до сих пор растут листья.</li>
+                    <li><strong>Мешочек с мхом</strong> — Мира его нюхает, когда надо подумать. Мох всегда помогает.</li>
+                    <li><strong>Тёплый плед</strong> — «Для сна. А сон — это важно.»</li>
+                    <li><strong>Кружка из тыквы</strong> — в ней она заваривает травяной чай. Угощает всех. Всегда.</li>
+                    <li><strong>Спящая соня Мгла</strong> — маленький пушистый зверёк, который спит на её плече 22 часа в сутки. Просыпается только поесть. Или когда Мира зовёт.</li>
+                    <li><strong>Дневник</strong> — исписан аккуратным почерком. Большая часть записей — «сегодня было хорошо». Дата не указана.</li>
+                    <li><strong>Гирлянда сушёных цветов</strong> — «Пахнет. Ммм.»</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- СПОСОБНОСТИ -->
+    <div id="tab-abilities" class="tab-content">
+        <div class="row">
+            <div class="card" style="flex:100%">
+                <h2>Способности</h2>
+
+                <div class="ability" id="ab1">
+                    <div class="ability-title">Сонное Облако</div>
+                    <p>Мира зевает — и враги в радиусе 3 м засыпают. Спасбросок Мудрости. Кто не уснул — получает помеху на атаку. «Ммм... вам бы поспать.»</p>
+                    <p><strong>Стоимость:</strong> 2 ячейки, <strong>КД:</strong> 2 раунда</p>
+                    <button id="btn1" onclick="useAbility(1)">Использовать</button>
+                    <div class="cooldown" id="cd1"></div>
+                </div>
+
+                <div class="ability" id="ab2">
+                    <div class="ability-title">Тёплый Мох</div>
+                    <p>Мира прикладывает ладонь к земле, и вокруг неё вырастает мягкий мох. Все союзники в радиусе 3 м восстанавливают 1d8 HP. «Ммм. Полегчало.»</p>
+                    <p><strong>Стоимость:</strong> 2 ячейки, <strong>КД:</strong> 2 раунда</p>
+                    <button id="btn2" onclick="useAbility(2)">Использовать</button>
+                    <div class="cooldown" id="cd2"></div>
+                </div>
+
+                <div class="ability" id="ab3">
+                    <div class="ability-title">Лепестки</div>
+                    <p>Мира сдувает с ладони лепестки. 2d4 психического урона и враг очарован на 1 раунд. Ему просто становится хорошо, и он не хочет драться. «Ммм...»</p>
+                    <p><strong>Стоимость:</strong> 1 ячейка, <strong>КД:</strong> 1 раунд</p>
+                    <button id="btn3" onclick="useAbility(3)">Использовать</button>
+                    <div class="cooldown" id="cd3"></div>
+                </div>
+
+                <div class="ability" id="ab4">
+                    <div class="ability-title">Соня в Помощь</div>
+                    <p>Мира будит Мглу. Соня, недовольная, спрыгивает и кусает врага (1d6 урона), после чего засыпает обратно. Враг теряет ход, пытаясь понять, что это было. «Ммм. Мгла не в настроении.»</p>
+                    <p><strong>Стоимость:</strong> 2 ячейки, <strong>КД:</strong> 3 раунда</p>
+                    <button id="btn4" onclick="useAbility(4)">Использовать</button>
+                    <div class="cooldown" id="cd4"></div>
+                </div>
+
+                <button style="margin-top:6px;width:100%" onclick="nextRound()">Раунд +1 (уменьшить КД)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- БАФФЫ -->
+    <div id="tab-buffs" class="tab-content">
+        <div class="row">
+            <div class="card" style="flex:100%">
+                <h2>Баффы</h2>
+                <div class="buff" onclick="toggleBuff(this)">
+                    <div><span class="buff-name">Тёплая Аура</span> — союзники рядом чувствуют себя спокойнее. +1 к спасброскам от страха.</div>
+                </div>
+                <div class="buff" onclick="toggleBuff(this)">
+                    <div><span class="buff-name">Травяной Чай</span> — +1 к восстановлению HP во время отдыха.</div>
+                </div>
+                <div class="buff" onclick="toggleBuff(this)">
+                    <div><span class="buff-name">Мгла на Плече</span> — +1 к удаче. Мгла спит, но всё равно помогает.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ИСТОРИЯ -->
+    <div id="tab-story" class="tab-content">
+        <div class="row">
+            <div class="card" style="flex:100%">
+                <h2>История</h2>
+                <p style="font-size:0.85em;">
+                    Мира родилась в Долине Тёплого Мха — тихом месте, где фирболги живут
+                    в гармонии с лесом. Она была самым спокойным ребёнком в семье. Пока
+                    остальные дети бегали и кричали, Мира сидела под деревом и слушала.
+                    Что слушала? «Ммм. Всё.»
+                </p>
+                <p style="font-size:0.85em;">
+                    Однажды, когда ей было семь лет, она заблудилась в лесу. Родители
+                    искали её три дня. Нашли на четвёртый — она сидела в кругу оленей,
+                    зайцев и одного очень удивлённого барсука, и все они спали.
+                    Мира тоже спала. Проснулась, посмотрела на родителей и сказала:
+                    «Ммм. Я тут поспала. Хорошо.»
+                </p>
+                <p style="font-size:0.85em;">
+                    С тех пор её стали звать «Сонной». Не потому что она много спала —
+                    а потому что рядом с ней всё засыпало. Цветы закрывались, птицы
+                    замолкали, ветер стихал. Она не делала ничего специально. Просто
+                    её присутствие было таким... спокойным.
+                </p>
+                <p style="font-size:0.85em;">
+                    В двенадцать лет она нашла в лесу раненого совёнка. Принесла домой,
+                    положила на подушку и уснула рядом. Утром совёнок был здоров.
+                    Никто не понял, что произошло. Мира тоже не поняла. Просто
+                    сказала: «Ммм. Ему стало хорошо.» С этого дня она поняла,
+                    что хочет помогать. Так она стала друидом.
+                </p>
+                <p style="font-size:0.85em;">
+                    Теперь она путешествует с отрядом. Говорит мало — в основном
+                    «ммм», «да», «нет» и «чай?». Зато все её понимают. Рядом с ней
+                    спокойнее. Раненые заживают быстрее. Враги засыпают. А те,
+                    кто не спит, почему-то перестают хотеть драться.
+                </p>
+                <p style="font-size:0.85em;">
+                    Её любимая фраза: «Ммм». Универсальная. Работает в любой ситуации.
+                    В отряде её обожают. Мгла — тоже. По крайней мере, пока спит.
+                </p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Вкладки (iPhone-friendly)
+    const tabButtons = document.querySelectorAll(".tab-btn");
+    const tabContents = {
+        stats: document.getElementById("tab-stats"),
+        inventory: document.getElementById("tab-inventory"),
+        abilities: document.getElementById("tab-abilities"),
+        buffs: document.getElementById("tab-buffs"),
+        story: document.getElementById("tab-story")
+    };
+
+    function switchTab(e) {
+        e.preventDefault();
+        const tab = this.getAttribute("data-tab");
+        tabButtons.forEach(b => b.classList.remove("active"));
+        this.classList.add("active");
+        Object.keys(tabContents).forEach(key => {
+            tabContents[key].classList.toggle("active", key === tab);
+        });
+    }
+
+    tabButtons.forEach(btn => {
+        btn.setAttribute("type", "button");
+        btn.addEventListener("touchstart", switchTab, { passive: false });
+        btn.addEventListener("click", switchTab);
+    });
+
+    // Фото
+    function updatePhoto() {
+        const url = document.getElementById('photoURL').value.trim();
+        if (url.length > 5) document.getElementById('charPhoto').src = url;
+    }
+
+    // HP
+    let hpCurrent = 22, hpMax = 22;
+    function updateHP() {
+        document.getElementById('hpCounter').textContent = hpCurrent + " / " + hpMax;
+        document.getElementById('hpBar').style.width = (hpCurrent / hpMax * 100) + "%";
+    }
+    function changeHP(d) {
+        hpCurrent = Math.max(0, Math.min(hpMax, hpCurrent + d));
+        updateHP();
+    }
+    updateHP();
+
+    // Ячейки
+    let mpCurrent = 4, mpMax = 4;
+    function updateMP() {
+        document.getElementById('mpCounter').textContent = mpCurrent + " / " + mpMax;
+        document.getElementById('mpBar').style.width = (mpCurrent / mpMax * 100) + "%";
+    }
+    function changeMP(d) {
+        mpCurrent = Math.max(0, Math.min(mpMax, mpCurrent + d));
+        updateMP();
+    }
+    updateMP();
+
+    // Способности
+    const abilities = {
+        1: { cost: 2, cd: 2, timer: 0 },
+        2: { cost: 2, cd: 2, timer: 0 },
+        3: { cost: 1, cd: 1, timer: 0 },
+        4: { cost: 2, cd: 3, timer: 0 }
+    };
+
+    function useAbility(id) {
+        const ab = abilities[id];
+        if (ab.timer > 0) return;
+        if (mpCurrent < ab.cost) return;
+        mpCurrent -= ab.cost;
+        updateMP();
+        ab.timer = ab.cd;
+        const btn = document.getElementById('btn' + id);
+        const cdLabel = document.getElementById('cd' + id);
+        btn.disabled = true;
+        cdLabel.textContent = "КД: " + ab.timer + " раунд(ов)";
+    }
+
+    function nextRound() {
+        Object.keys(abilities).forEach(key => {
+            const id = parseInt(key);
+            const ab = abilities[id];
+            if (ab.timer > 0) {
+                ab.timer -= 1;
+                const btn = document.getElementById('btn' + id);
+                const cdLabel = document.getElementById('cd' + id);
+                if (ab.timer <= 0) {
+                    ab.timer = 0;
+                    btn.disabled = false;
+                    cdLabel.textContent = "Готово";
+                } else {
+                    cdLabel.textContent = "КД: " + ab.timer + " раунд(ов)";
+                }
+            }
+        });
+    }
+
+    // Баффы
+    function toggleBuff(el) {
+        el.classList.toggle("active");
+    }
+</script>
+</body>
+</html>
