@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Физзл Кувырок — Лист персонажа</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    body {
+        font-family: system-ui, -apple-system, sans-serif;
+        background: #140601;
+        color: #e5e7eb;
+        margin: 0;
+        padding: 10px;
+    }
+    .sheet {
+        max-width: 800px;
+        margin: 0 auto;
+        background: #2a0f04;
+        border-radius: 12px;
+        padding: 12px;
+        border: 1px solid #7c2d12;
+    }
+    h1 { margin: 0 0 4px 0; }
+    .subtitle { font-size: 0.9em; color: #fbbf24; margin-bottom: 8px; }
+
+    .tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        margin-bottom: 8px;
+    }
+    .tab-btn {
+        flex: 1 1 90px;
+        background: #7c2d12;
+        border: 1px solid #f59e0b;
+        color: #fef3c7;
+        padding: 4px 6px;
+        border-radius: 999px;
+        cursor: pointer;
+        font-size: 0.85em;
+        text-align: center;
+    }
+    .tab-btn.active {
+        background: #f59e0b;
+        color: #1c0a02;
+    }
+    .tab-content { display: none; margin-top: 8px; }
+    .tab-content.active { display: block; }
+
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .card {
+        flex: 1 1 240px;
+        background: #180802;
+        border-radius: 8px;
+        padding: 8px;
+        border: 1px solid #7c2d12;
+    }
+
+    .photo-block img {
+        width: 100%;
+        height: auto;
+        max-height: 220px;
+        object-fit: cover;
+        border-radius: 6px;
+        border: 1px solid #f59e0b;
+    }
+    .photo-input {
+        width: 100%;
+        background: #180802;
+        border: 1px solid #334155;
+        border-radius: 4px;
+        padding: 4px;
+        color: #e5e7eb;
+        margin-top: 6px;
+        font-size: 0.8em;
+    }
+
+    .stat-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.9em;
+    }
+    .counter { font-size: 1.1em; font-weight: bold; }
+
+    button {
+        background: #f59e0b;
+        border: none;
+        color: #1c0a02;
+        padding: 3px 6px;
+        margin: 0 2px 2px 0;
+        border-radius: 999px;
+        cursor: pointer;
+        font-size: 0.8em;
+    }
+    button:disabled {
+        background: #4b5563;
+        color: #9ca3af;
+        cursor: default;
+    }
+
+    .bar {
+        position: relative;
+        height: 12px;
+        background: #180802;
+        border-radius: 999px;
+        overflow: hidden;
+        margin-top: 4px;
+        border: 1px solid #7c2d12;
+    }
+    .bar-fill { height: 100%; width: 100%; }
+    .hp { background: linear-gradient(90deg, #ef4444, #b91c1c); }
+    .mp { background: linear-gradient(90deg, #fbbf24, #ea580c); }
+
+    .ability {
+        background: #200a04;
+        padding: 6px;
+        border-radius: 6px;
+        margin-bottom: 6px;
+        border: 1px solid #7c2d12;
+        font-size: 0.85em;
+    }
+    .ability-title {
+        font-weight: bold;
+        color: #fbbf24;
+        margin-bottom: 4px;
+    }
+    .cooldown {
+        font-size: 0.75em;
+        color: #fcd34d;
+        margin-top: 2px;
+    }
+
+    .buff {
+        background: #200a04;
+        padding: 6px;
+        border-radius: 6px;
+        margin-bottom: 4px;
+        cursor: pointer;
+        border: 1px solid #7c2d12;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.85em;
+    }
+    .buff-name { font-weight: bold; color: #fed7aa; }
+    .buff.active {
+        background: #7c2d12;
+        border-color: #f59e0b;
+    }
+
+    .quick-stats {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        margin-top: 6px;
+    }
+    .quick-stat {
+        flex: 1 1 28%;
+        background: #2a0f04;
+        border: 1px solid #b45309;
+        border-radius: 6px;
+        padding: 3px 4px;
+        text-align: center;
+        font-size: 0.75em;
+    }
+    .quick-stat .qs-name {
+        color: #fcd34d;
+        display: block;
+        font-size: 0.85em;
+    }
+    .quick-stat .qs-val {
+        font-weight: bold;
+        font-size: 1.15em;
+        color: #fbbf24;
+    }
+
+    textarea {
+        width: 100%;
+        background: #180802;
+        border: 1px solid #334155;
+        border-radius: 6px;
+        color: #e5e7eb;
+        padding: 6px;
+        resize: vertical;
+        min-height: 70px;
+        font-size: 0.85em;
+    }
+
+    @media (max-width: 600px) {
+        .card { flex: 1 1 100%; }
+        .tab-btn { flex: 1 1 45%; }
+        .quick-stat { flex: 1 1 30%; }
+    }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+    <h1>Физзл Кувырок</h1>
+    <div class="subtitle">Гном-дикий маг. Задаёт вопросы, на которые никто не хочет отвечать. Делает вещи, которые никто не просил.</div>
+
+    <div class="tabs">
+        <button type="button" class="tab-btn active" data-tab="stats">⚔️ Статы</button>
+        <button type="button" class="tab-btn" data-tab="inventory">🎒 Инвентарь</button>
+        <button type="button" class="tab-btn" data-tab="abilities">💥 Способности</button>
+        <button type="button" class="tab-btn" data-tab="buffs">✨ Баффы</button>
+        <button type="button" class="tab-btn" data-tab="story">📖 История</button>
+    </div>
+
+    <!-- СТАТЫ -->
+    <div id="tab-stats" class="tab-content active">
+        <div class="row">
+            <div class="card photo-block">
+                <h2>Фото</h2>
+                <img id="charPhoto" src="https://picsum.photos/seed/fizzl/600/400" alt="Физзл">
+                <input class="photo-input" id="photoURL" placeholder="URL изображения" oninput="updatePhoto()">
+            </div>
+
+            <div class="card">
+                <div class="stat-header">
+                    <h2>HP</h2>
+                    <div class="counter" id="hpCounter">20 / 20</div>
+                </div>
+                <div class="bar"><div class="bar-fill hp" id="hpBar"></div></div>
+                <button onclick="changeHP(-5)">-5</button>
+                <button onclick="changeHP(-1)">-1</button>
+                <button onclick="changeHP(1)">+1</button>
+                <button onclick="changeHP(5)">+5</button>
+            </div>
+
+            <div class="card">
+                <div class="stat-header">
+                    <h2>Очки чар</h2>
+                    <div class="counter" id="mpCounter">3 / 3</div>
+                </div>
+                <div class="bar"><div class="bar-fill mp" id="mpBar"></div></div>
+                <button onclick="changeMP(-3)">-3</button>
+                <button onclick="changeMP(-1)">-1</button>
+                <button onclick="changeMP(1)">+1</button>
+                <button onclick="changeMP(3)">+3</button>
+            </div>
+
+            <div class="card">
+                <h2>Данные</h2>
+                <ul style="padding-left:18px;font-size:0.85em;margin:4px 0;">
+                    <li><strong>Раса:</strong> Лесной гном</li>
+                    <li><strong>Класс:</strong> Чародей (Дикая Магия)</li>
+                    <li><strong>Уровень:</strong> 3</li>
+                    <li><strong>Происхождение:</strong> Деревня Тихое Колесо</li>
+                </ul>
+
+                <h3 style="margin:8px 0 4px 0;font-size:0.9em;color:#fcd34d;">Характеристики</h3>
+                <div class="quick-stats">
+                    <div class="quick-stat">
+                        <span class="qs-name">💪 Сила</span>
+                        <span class="qs-val">8 (-1)</span>
+                    </div>
+                    <div class="quick-stat">
+                        <span class="qs-name">🤸 Ловк</span>
+                        <span class="qs-val">14 (+2)</span>
+                    </div>
+                    <div class="quick-stat">
+                        <span class="qs-name">🛡 Тел</span>
+                        <span class="qs-val">14 (+2)</span>
+                    </div>
+                    <div class="quick-stat">
+                        <span class="qs-name">📚 Инт</span>
+                        <span class="qs-val">12 (+1)</span>
+                    </div>
+                    <div class="quick-stat">
+                        <span class="qs-name">👀 Мдр</span>
+                        <span class="qs-val">10 (+0)</span>
+                    </div>
+                    <div class="quick-stat">
+                        <span class="qs-name">😎 Хар</span>
+                        <span class="qs-val">17 (+3)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Характеристики (подробно)</h3>
+            <ul>
+                <li><strong>💪 Сила:</strong> 8 (-1) — «Я не слабый, я лёгкий!»</li>
+                <li><strong>🤸 Ловкость:</strong> 14 (+2)</li>
+                <li><strong>🛡 Телосложение:</strong> 14 (+2)</li>
+                <li><strong>📚 Интеллект:</strong> 12 (+1) — «Я всё продумал. Почти. Наполовину.»</li>
+                <li><strong>👀 Мудрость:</strong> 10 (+0) — «А если подумать — а зачем?»</li>
+                <li><strong>😎 Харизма:</strong> 17 (+3) — обаятельный, даже когда пугает</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h3>Боевые показатели</h3>
+            <ul>
+                <li><strong>🛡 Броня:</strong> 12 (кожа + ловкость)</li>
+                <li><strong>⚡ Инициатива:</strong> +2</li>
+                <li><strong>🏃 Скорость:</strong> 7,5 м (но бегает кругами)</li>
+                <li><strong>🎯 Бонус мастерства:</strong> +2</li>
+                <li><strong>👁 Пассивная внимательность:</strong> 10</li>
+            </ul>
+        </div>
+
+        <div class="row">
+            <div class="card" style="flex:100%">
+                <h2>Заметки</h2>
+                <textarea id="notes"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <!-- ИНВЕНТАРЬ -->
+    <div id="tab-inventory" class="tab-content">
+        <div class="row">
+            <div class="card" style="flex:100%">
+                <h2>Инвентарь</h2>
+                <ul style="padding-left:18px;font-size:0.85em;">
+                    <li><strong>Кулон «Не трогай»</strong> — источник его силы. Физзл его трогал. Много раз.</li>
+                    <li><strong>Кинжал «Шутка»</strong> — 1d4 колющий. Кидает его вверх и ловит. Обычно.</li>
+                    <li><strong>Колба с искрящейся жидкостью</strong> — никто не знает, что внутри. Даже Физзл.</li>
+                    <li><strong>Мешочек с болтиками</strong> — 47 штук. Считает их, когда нервничает. Иногда пересчитывает.</li>
+                    <li><strong>Дневник «Вопросы, которые надо задать»</strong> — 8 страниц. Все вопросы. Все странные.</li>
+                    <li><strong>Сломанный компас</strong> — показывает туда, куда Физзл хочет. Или наоборот.</li>
+                    <li><strong>Верёвка (15 м)</strong> — «На всякий случай! А какой? Я не знаю, но пусть будет!»</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- СПОСОБНОСТИ -->
+    <div id="tab-abilities" class="tab-content">
+        <div class="row">
+            <div class="card" style="flex:100%">
+                <h2>Способности</h2>
+
+                <div class="ability" id="ab1">
+                    <div class="ability-title">Дикий Всплеск</div>
+                    <p>3d6 урона случайного типа (огонь, холод, электричество, психический, кислота). После — Физзл кидает d20. На 1 — что-то странное (цветы, вспышка, он становится розовым на минуту).</p>
+                    <p><strong>Стоимость:</strong> 2 чар, <strong>КД:</strong> 2 раунда</p>
+                    <button id="btn1" onclick="useAbility(1)">Использовать</button>
+                    <div class="cooldown" id="cd1"></div>
+                </div>
+
+                <div class="ability" id="ab2">
+                    <div class="ability-title">Прилив Хаоса</div>
+                    <p>Физзл получает преимущество на один бросок. После этого Мастер может вызвать Дикий Всплеск в любой момент. Физзл об этом не жалеет. Пока что.</p>
+                    <p><strong>Стоимость:</strong> 1 чар, <strong>КД:</strong> 1 раунд</p>
+                    <button id="btn2" onclick="useAbility(2)">Использовать</button>
+                    <div class="cooldown" id="cd2"></div>
+                </div>
+
+                <div class="ability" id="ab3">
+                    <div class="ability-title">Волшебная Стрела «Почему Одна?»</div>
+                    <p>3 снаряда по 1d4+1 силового урона. Физзл уверен, что стрел должно быть больше, и каждый раз спрашивает, почему их только три. Никто не знает.</p>
+                    <p><strong>Стоимость:</strong> 1 чар, <strong>КД:</strong> 1 раунд</p>
+                    <button id="btn3" onclick="useAbility(3)">Использовать</button>
+                    <div class="cooldown" id="cd3"></div>
+                </div>
+
+                <div class="ability" id="ab4">
+                    <div class="ability-title">Туманный Вопрос</div>
+                    <p>Физзл задаёт врагу неудобный вопрос. Спасбросок Мудрости или 2d6 психического урона и помеха на атаку. Вопрос всегда странный. Например: «А ты когда-нибудь думал, что твоя тень живёт своей жизнью?»</p>
+                    <p><strong>Стоимость:</strong> 2 чар, <strong>КД:</strong> 3 раунда</p>
+                    <button id="btn4" onclick="useAbility(4)">Использовать</button>
+                    <div class="cooldown" id="cd4"></div>
+                </div>
+
+                <button style="margin-top:6px;width:100%" onclick="nextRound()">Раунд +1 (уменьшить КД)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- БАФФЫ -->
+    <div id="tab-buffs" class="tab-content">
+        <div class="row">
+            <div class="card" style="flex:100%">
+                <h2>Баффы</h2>
+                <div class="buff" onclick="toggleBuff(this)">
+                    <div><span class="buff-name">Искры в Глазах</span> — +1 к запугиванию. Работает, потому что никто не знает, что он сделает.</div>
+                </div>
+                <div class="buff" onclick="toggleBuff(this)">
+                    <div><span class="buff-name">Слишком Много Энергии</span> — +1 к инициативе. Не может стоять на месте.</div>
+                </div>
+                <div class="buff" onclick="toggleBuff(this)">
+                    <div><span class="buff-name">Странный Вопрос</span> — враги отвлекаются. Союзники тоже, но им норм.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ИСТОРИЯ -->
+    <div id="tab-story" class="tab-content">
+        <div class="row">
+            <div class="card" style="flex:100%">
+                <h2>История</h2>
+                <p style="font-size:0.85em;">
+                    Физзл Кувырок родился в деревне Тихое Колесо. Деревня называлась так потому,
+                    что там всё было размеренно: все вставали в одно время, ели в одно время,
+                    ложились в одно время, и никто никогда не делал ничего неожиданного.
+                    Кроме Физзла.
+                </p>
+                <p style="font-size:0.85em;">
+                    Он родился в полночь, когда все спали, и первое, что сделал — засмеялся.
+                    Повитуха уронила его от неожиданности. Физзл не обиделся. Физзл подумал,
+                    что это игра, и засмеялся ещё громче. С тех пор он смеётся в самые
+                    неподходящие моменты.
+                </p>
+                <p style="font-size:0.85em;">
+                    В детстве он разобрал дедушкины часы, чтобы посмотреть, «а что там тикает».
+                    Часы не починил. Зато нашёл в них маленький кулон с надписью «НЕ ТРОГАЙ».
+                    Физзл потрогал. Кулон треснул, из него вырвалась дикая магия, и Физзл
+                    на три дня стал фиолетовым. Ему понравилось. Он попробовал ещё раз.
+                    Стал зелёным. Тоже понравилось. С тех пор он ищет кулоны с надписью
+                    «НЕ ТРОГАЙ» по всему миру — потому что кто-то же должен их потрогать.
+                </p>
+                <p style="font-size:0.85em;">
+                    Деревенские сначала пытались его воспитывать. Потом пытались его успокоить.
+                    Потом смирились и просто старались не оставлять рядом с чем-нибудь хрупким.
+                    Физзл, в общем-то, никого не обижал — он просто задавал вопросы. Много
+                    вопросов. Например: «А если дерево упадёт, а никто не услышит — оно
+                    вообще падало?» или «А почему у рыб нет карманов?». На эти вопросы
+                    никто не знал ответа, и Физзл решил, что найдёт ответы сам.
+                </p>
+                <p style="font-size:0.85em;">
+                    Однажды он спросил у старосты, почему небо голубое. Староста не знал.
+                    Физзл сказал: «Ладно, я узнаю сам» — и ушёл из деревни. С тех пор
+                    путешествует, задаёт вопросы, случайно взрывает всё вокруг и всегда
+                    готов сказать: «Я не сумасшедший! Я просто... очень, ОЧЕНЬ внимательный!»
+                </p>
+                <p style="font-size:0.85em;">
+                    В отряде его одновременно любят и опасаются. Никто не знает, что он
+                    сделает в следующий ход. Иногда — сам Физзл не знает. Но это же
+                    и есть весело, правда?
+                </p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Вкладки (iPhone-friendly)
+    const tabButtons = document.querySelectorAll(".tab-btn");
+    const tabContents = {
+        stats: document.getElementById("tab-stats"),
+        inventory: document.getElementById("tab-inventory"),
+        abilities: document.getElementById("tab-abilities"),
+        buffs: document.getElementById("tab-buffs"),
+        story: document.getElementById("tab-story")
+    };
+
+    function switchTab(e) {
+        e.preventDefault();
+        const tab = this.getAttribute("data-tab");
+        tabButtons.forEach(b => b.classList.remove("active"));
+        this.classList.add("active");
+        Object.keys(tabContents).forEach(key => {
+            tabContents[key].classList.toggle("active", key === tab);
+        });
+    }
+
+    tabButtons.forEach(btn => {
+        btn.setAttribute("type", "button");
+        btn.addEventListener("touchstart", switchTab, { passive: false });
+        btn.addEventListener("click", switchTab);
+    });
+
+    // Фото
+    function updatePhoto() {
+        const url = document.getElementById('photoURL').value.trim();
+        if (url.length > 5) document.getElementById('charPhoto').src = url;
+    }
+
+    // HP
+    let hpCurrent = 20, hpMax = 20;
+    function updateHP() {
+        document.getElementById('hpCounter').textContent = hpCurrent + " / " + hpMax;
+        document.getElementById('hpBar').style.width = (hpCurrent / hpMax * 100) + "%";
+    }
+    function changeHP(d) {
+        hpCurrent = Math.max(0, Math.min(hpMax, hpCurrent + d));
+        updateHP();
+    }
+    updateHP();
+
+    // Очки чар
+    let mpCurrent = 3, mpMax = 3;
+    function updateMP() {
+        document.getElementById('mpCounter').textContent = mpCurrent + " / " + mpMax;
+        document.getElementById('mpBar').style.width = (mpCurrent / mpMax * 100) + "%";
+    }
+    function changeMP(d) {
+        mpCurrent = Math.max(0, Math.min(mpMax, mpCurrent + d));
+        updateMP();
+    }
+    updateMP();
+
+    // Способности
+    const abilities = {
+        1: { cost: 2, cd: 2, timer: 0 },
+        2: { cost: 1, cd: 1, timer: 0 },
+        3: { cost: 1, cd: 1, timer: 0 },
+        4: { cost: 2, cd: 3, timer: 0 }
+    };
+
+    function useAbility(id) {
+        const ab = abilities[id];
+        if (ab.timer > 0) return;
+        if (mpCurrent < ab.cost) return;
+        mpCurrent -= ab.cost;
+        updateMP();
+        ab.timer = ab.cd;
+        const btn = document.getElementById('btn' + id);
+        const cdLabel = document.getElementById('cd' + id);
+        btn.disabled = true;
+        cdLabel.textContent = "КД: " + ab.timer + " раунд(ов)";
+    }
+
+    function nextRound() {
+        Object.keys(abilities).forEach(key => {
+            const id = parseInt(key);
+            const ab = abilities[id];
+            if (ab.timer > 0) {
+                ab.timer -= 1;
+                const btn = document.getElementById('btn' + id);
+                const cdLabel = document.getElementById('cd' + id);
+                if (ab.timer <= 0) {
+                    ab.timer = 0;
+                    btn.disabled = false;
+                    cdLabel.textContent = "Готово";
+                } else {
+                    cdLabel.textContent = "КД: " + ab.timer + " раунд(ов)";
+                }
+            }
+        });
+    }
+
+    // Баффы
+    function toggleBuff(el) {
+        el.classList.toggle("active");
+    }
+</script>
+</body>
+</html>
