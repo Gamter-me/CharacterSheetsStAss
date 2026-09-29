@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Корван «Утёс» Вершина — Лист персонажа</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    body {
+        font-family: system-ui, -apple-system, sans-serif;
+        background: #0a0d11;
+        color: #e5e7eb;
+        margin: 0;
+        padding: 10px;
+    }
+    .sheet {
+        max-width: 800px;
+        margin: 0 auto;
+        background: #131a22;
+        border-radius: 12px;
+        padding: 12px;
+        border: 1px solid #334155;
+    }
+    h1 { margin: 0 0 4px 0; }
+    .subtitle { font-size: 0.9em; color: #fbbf24; margin-bottom: 8px; }
+
+    .tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        margin-bottom: 8px;
+    }
+    .tab-btn {
+        flex: 1 1 90px;
+        background: #1e293b;
+        border: 1px solid #d97706;
+        color: #fef3c7;
+        padding: 4px 6px;
+        border-radius: 999px;
+        cursor: pointer;
+        font-size: 0.85em;
+        text-align: center;
+    }
+    .tab-btn.active {
+        background: #d97706;
+        color: #1c0a02;
+    }
+    .tab-content { display: none; margin-top: 8px; }
+    .tab-content.active { display: block; }
+
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .card {
+        flex: 1 1 240px;
+        background: #080c11;
+        border-radius: 8px;
+        padding: 8px;
+        border: 1px solid #334155;
+    }
+
+    .photo-block img {
+        width: 100%;
+        height: auto;
+        max-height: 220px;
+        object-fit: cover;
+        border-radius: 6px;
+        border: 1px solid #d97706;
+    }
+    .photo-input {
+        width: 100%;
+        background: #080c11;
+        border: 1px solid #334155;
+        border-radius: 4px;
+        padding: 4px;
+        color: #e5e7eb;
+        margin-top: 6px;
+        font-size: 0.8em;
+    }
+
+    .stat-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.9em;
+    }
+    .counter { font-size: 1.1em; font-weight: bold; }
+
+    button {
+        background: #d97706;
+        border: none;
+        color: #1c0a02;
+        padding: 3px 6px;
+        margin: 0 2px 2px 0;
+        border-radius: 999px;
+        cursor: pointer;
+        font-size: 0.8em;
+    }
+    button:disabled {
+        background: #4b5563;
+        color: #9ca3af;
+        cursor: default;
+    }
+
+    .bar {
+        position: relative;
+        height: 12px;
+        background: #080c11;
+        border-radius: 999px;
+        overflow: hidden;
+        margin-top: 4px;
+        border: 1px solid #334155;
+    }
+    .bar-fill { height: 100%; width: 100%; }
+    .hp { background: linear-gradient(90deg, #ef4444, #b91c1c); }
+    .mp { background: linear-gradient(90deg, #d97706, #92400e); }
+
+    .ability {
+        background: #0f141b;
+        padding: 6px;
+        border-radius: 6px;
+        margin-bottom: 6px;
+        border: 1px solid #334155;
+        font-size: 0.85em;
+    }
+    .ability-title {
+        font-weight: bold;
+        color: #fbbf24;
+        margin-bottom: 4px;
+    }
+    .cooldown {
+        font-size: 0.75em;
+        color: #cbd5e1;
+        margin-top: 2px;
+    }
+
+    .buff {
+        background: #0f141b;
+        padding: 6px;
+        border-radius: 6px;
+        margin-bottom: 4px;
+        cursor: pointer;
+        border: 1px solid #334155;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.85em;
+    }
+    .buff-name { font-weight: bold; color: #fde68a; }
+    .buff.active {
+        background: #1e293b;
+        border-color: #d97706;
+    }
+
+    .quick-stats {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        margin-top: 6px;
+    }
+    .quick-stat {
+        flex: 1 1 28%;
+        background: #1a2530;
+        border: 1px solid #475569;
+        border-radius: 6px;
+        padding: 3px 4px;
+        text-align: center;
+        font-size: 0.75em;
+    }
+    .quick-stat .qs-name {
+        color: #cbd5e1;
+        display: block;
+        font-size: 0.85em;
+    }
+    .quick-stat .qs-val {
+        font-weight: bold;
+        font-size: 1.15em;
+        color: #fbbf24;
+    }
+
+    textarea {
+        width: 100%;
+        background: #080c11;
+        border: 1px solid #334155;
+        border-radius: 6px;
+        color: #e5e7eb;
+        padding: 6px;
+        resize: vertical;
+        min-height: 70px;
+        font-size: 0.85em;
+    }
+
+    @media (max-width: 600px) {
+        .card { flex: 1 1 100%; }
+        .tab-btn { flex: 1 1 45%; }
+        .quick-stat { flex: 1 1 30%; }
+    }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+    <h1>Корван «Утёс» Вершина</h1>
+    <div class="subtitle">Голиаф-воин. Огромный, спокойный, надёжный. Ему просто пофиг — и в этом его сила.</div>
+
+    <div class="tabs">
+        <button type="button" class="tab-btn active" data-tab="stats">⚔️ Статы</button>
+        <button type="button" class="tab-btn" data-tab="inventory">🎒 Инвентарь</button>
+        <button type="button" class="tab-btn" data-tab="abilities">💥 Способности</button>
+        <button type="button" class="tab-btn" data-tab="buffs">✨ Баффы</button>
+        <button type="button" class="tab-btn" data-tab="story">📖 История</button>
+    </div>
+
+    <!-- СТАТЫ -->
+    <div id="tab-stats" class="tab-content active">
+        <div class="row">
+            <div class="card photo-block">
+                <h2>Фото</h2>
+                <img id="charPhoto" src="https://picsum.photos/seed/korvan/600/400" alt="Корван">
+                <input class="photo-input" id="photoURL" placeholder="URL изображения" oninput="updatePhoto()">
+            </div>
+
+            <div class="card">
+                <div class="stat-header">
+                    <h2>HP</h2>
+                    <div class="counter" id="hpCounter">31 / 31</div>
+                </div>
+                <div class="bar"><div class="bar-fill hp" id="hpBar"></div></div>
+                <button onclick="changeHP(-5)">-5</button>
+                <button onclick="changeHP(-1)">-1</button>
+                <button onclick="changeHP(1)">+1</button>
+                <button onclick="changeHP(5)">+5</button>
+            </div>
+
+            <div class="card">
+                <div class="stat-header">
+                    <h2>Кости превосходства</h2>
+                    <div class="counter" id="mpCounter">4 / 4</div>
+                </div>
+                <div class="bar"><div class="bar-fill mp" id="mpBar"></div></div>
+                <button onclick="changeMP(-3)">-3</button>
+                <button onclick="changeMP(-1)">-1</button>
+                <button onclick="changeMP(1)">+1</button>
+                <button onclick="changeMP(3)">+3</button>
+            </div>
+
+            <div class="card">
+                <h2>Данные</h2>
+                <ul style="padding-left:18px;font-size:0.85em;margin:4px 0;">
+                    <li><strong>Раса:</strong> Голиаф</li>
+                    <li><strong>Класс:</strong> Воин (Мастер Боевых Искусств)</li>
+                    <li><strong>Уровень:</strong> 3</li>
+                    <li><strong>Происхождение:</strong> Горы Клыка, племя Вершины</li>
+                </ul>
+
+                <h3 style="margin:8px 0 4px 0;font-size:0.9em;color:#cbd5e1;">Характеристики</h3>
+                <div class="quick-stats">
+                    <div class="quick-stat">
+                        <span class="qs-name">💪 Сила</span>
+                        <span class="qs-val">18 (+4)</span>
+                    </div>
+                    <div class="quick-stat">
+                        <span class="qs-name">🤸 Ловк</span>
+                        <span class="qs-val">10 (+0)</span>
+                    </div>
+                    <div class="quick-stat">
+                        <span class="qs-name">🛡 Тел</span>
+                        <span class="qs-val">16 (+3)</span>
+                    </div>
+                    <div class="quick-stat">
+                        <span class="qs-name">📚 Инт</span>
+                        <span class="qs-val">13 (+1)</span>
+                    </div>
+                    <div class="quick-stat">
+                        <span class="qs-name">👀 Мдр</span>
+                        <span class="qs-val">12 (+1)</span>
+                    </div>
+                    <div class="quick-stat">
+                        <span class="qs-name">😎 Хар</span>
+                        <span class="qs-val">12 (+1)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Характеристики (подробно)</h3>
+            <ul>
+                <li><strong>💪 Сила:</strong> 18 (+4) — «Ну, да, сильный. А что, надо?»</li>
+                <li><strong>🤸 Ловкость:</strong> 10 (+0) — «Я не медленный. Я обстоятельный.»</li>
+                <li><strong>🛡 Телосложение:</strong> 16 (+3) — «Падал с горы. Норм.»</li>
+                <li><strong>📚 Интеллект:</strong> 13 (+1) — соображает, просто не показывает</li>
+                <li><strong>👀 Мудрость:</strong> 12 (+1) — «Зачем нервничать? Всё равно как-нибудь да будет.»</li>
+                <li><strong>😎 Харизма:</strong> 12 (+1) — «Я? Да я вообще ни при чём.»</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h3>Боевые показатели</h3>
+            <ul>
+                <li><strong>🛡 Броня:</strong> 17 (кольчуга + щит)</li>
+                <li><strong>⚡ Инициатива:</strong> +0 — «Куда спешить?»</li>
+                <li><strong>🏃 Скорость:</strong> 9 м (широкий, неспешный шаг)</li>
+                <li><strong>🎯 Бонус мастерства:</strong> +2</li>
+                <li><strong>👁 Пассивная внимательность:</strong> 11</li>
+            </ul>
+        </div>
+
+        <div class="row">
+            <div class="card" style="flex:100%">
+                <h2>Заметки</h2>
+                <textarea id="notes"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <!-- ИНВЕНТАРЬ -->
+    <div id="tab-inventory" class="tab-content">
+        <div class="row">
+            <div class="card" style="flex:100%">
+                <h2>Инвентарь</h2>
+                <ul style="padding-left:18px;font-size:0.85em;">
+                    <li><strong>Двуручный меч «Ну»</strong> — 2d6 рубящий. Назван так, потому что Корван не придумал названия и сказал «ну...»</li>
+                    <li><strong>Щит «Стенка»</strong> — +2 к броне. «Просто стенка. Стоит. Норм.»</li>
+                    <li><strong>Огромный рюкзак</strong> — «А вдруг пригодится?» — говорит он, засовывая туда очередной камень.</li>
+                    <li><strong>Три камня с гор</strong> — «Первый — на удачу. Второй — на память. Третий — просто красивый.»</li>
+                    <li><strong>Огромная фляга</strong> — с чем-то крепким. «Для сугреву.»</li>
+                    <li><strong>Сеть</strong> — «На всякий случай.» Какой? «Не знаю. Но пусть.»</li>
+                    <li><strong>Плед</strong> — тёплый. «Спать на улице — норм. Но лучше в пледе.»</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- СПОСОБНОСТИ -->
+    <div id="tab-abilities" class="tab-content">
+        <div class="row">
+            <div class="card" style="flex:100%">
+                <h2>Способности</h2>
+
+                <div class="ability" id="ab1">
+                    <div class="ability-title">Ну, давай</div>
+                    <p>Корван лениво замахивается мечом. Атака с +1d8 к урону. Если попадает — говорит: «Ну, вот и всё». Если промахивается — говорит: «Бывает».</p>
+                    <p><strong>Стоимость:</strong> 1 кость, <strong>КД:</strong> 1 раунд</p>
+                    <button id="btn1" onclick="useAbility(1)">Использовать</button>
+                    <div class="cooldown" id="cd1"></div>
+                </div>
+
+                <div class="ability" id="ab2">
+                    <div class="ability-title">Стенка</div>
+                    <p>Корван просто встаёт на пути врага. Союзник за его спиной получает +2 к броне до конца раунда. Корван при этом даже не напрягается — просто стоит.</p>
+                    <p><strong>Стоимость:</strong> 1 кость, <strong>КД:</strong> 2 раунда</p>
+                    <button id="btn2" onclick="useAbility(2)">Использовать</button>
+                    <div class="cooldown" id="cd2"></div>
+                </div>
+
+                <div class="ability" id="ab3">
+                    <div class="ability-title">А, точно</div>
+                    <p>Корван внезапно вспоминает, что у него есть щит. Или нога. Или что-то ещё. Атака с +1d8 урона, враг делает спасбросок Силы или падает. «А, точно, я же умею это.»</p>
+                    <p><strong>Стоимость:</strong> 1 кость, <strong>КД:</strong> 1 раунд</p>
+                    <button id="btn3" onclick="useAbility(3)">Использовать</button>
+                    <div class="cooldown" id="cd3"></div>
+                </div>
+
+                <div class="ability" id="ab4">
+                    <div class="ability-title">Ладно, погнали</div>
+                    <p>Если Корван всё-таки решил напрячься — берегись. Он наносит двойной урон по одной цели и даёт всем союзникам +2 к следующей атаке. Это случается редко. Но когда случается — враги жалеют.</p>
+                    <p><strong>Стоимость:</strong> 2 кости, <strong>КД:</strong> 3 раунда</p>
+                    <button id="btn4" onclick="useAbility(4)">Использовать</button>
+                    <div class="cooldown" id="cd4"></div>
+                </div>
+
+                <button style="margin-top:6px;width:100%" onclick="nextRound()">Раунд +1 (уменьшить КД)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- БАФФЫ -->
+    <div id="tab-buffs" class="tab-content">
+        <div class="row">
+            <div class="card" style="flex:100%">
+                <h2>Баффы</h2>
+                <div class="buff" onclick="toggleBuff(this)">
+                    <div><span class="buff-name">Спокойствие Утёса</span> — +1 к спасброскам от испуга. Гора не дрожит.</div>
+                </div>
+                <div class="buff" onclick="toggleBuff(this)">
+                    <div><span class="buff-name">Атлетическое Пофиг</span> — +1 к проверкам Силы. Просто делает. Просто получается.</div>
+                </div>
+                <div class="buff" onclick="toggleBuff(this)">
+                    <div><span class="buff-name">Надёжное Плечо</span> — +1 к защите союзников. Рядом с ним спокойнее.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ИСТОРИЯ -->
+    <div id="tab-story" class="tab-content">
+        <div class="row">
+            <div class="card" style="flex:100%">
+                <h2>История</h2>
+                <p style="font-size:0.85em;">
+                    Корван родился в племени Вершины, что живёт на склонах гор Клыка.
+                    Голиафы — народ суровый: кто выше, кто сильнее, кто первым взошёл
+                    на пик — тот и молодец. Корван был самым высоким за три поколения.
+                    Ему прочили судьбу великого воина, который будет крушить врагов
+                    одной левой.
+                </p>
+                <p style="font-size:0.85em;">
+                    Корван выслушал это, сказал «ну, ладно» — и пошёл спать. С тех пор
+                    он так и живёт: что бы ни случилось, он говорит «ну, ладно» и
+                    делает. Не суетится, не нервничает, не переживает. Просто делает.
+                    И, что самое обидное для окружающих — у него всё получается.
+                </p>
+                <p style="font-size:0.85em;">
+                    Когда пришло время инициации, Корван вышел на бой с самым сильным
+                    воином племени. Тот налетел на него, как буря. Корван стоял.
+                    Просто стоял. Потом зевнул. Потом, как бы между делом, толкнул
+                    противника — и тот улетел. Шаман сказал: «Это была техника!»
+                    Корван пожал плечами: «Ну, наверное. А что, надо было иначе?»
+                </p>
+                <p style="font-size:0.85em;">
+                    С тех пор его прозвали «Утёсом» — за умение стоять на месте
+                    и не падать, что бы ни происходило. Он ушёл из племени, потому
+                    что «там скучно». Нашёл отряд. И остался. Потому что «ребята
+                    прикольные, а еда вкусная».
+                </p>
+                <p style="font-size:0.85em;">
+                    Теперь он с отрядом. Огромный, спокойный, надёжный. В бою он
+                    не бросается вперёд — стоит, смотрит, ждёт, а потом делает
+                    что-нибудь простое, но очень эффективное. Его любимая фраза:
+                    «Я не думаю. Я просто знаю. Ну, или не знаю. Но вроде норм».
+                </p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Вкладки (iPhone-friendly)
+    const tabButtons = document.querySelectorAll(".tab-btn");
+    const tabContents = {
+        stats: document.getElementById("tab-stats"),
+        inventory: document.getElementById("tab-inventory"),
+        abilities: document.getElementById("tab-abilities"),
+        buffs: document.getElementById("tab-buffs"),
+        story: document.getElementById("tab-story")
+    };
+
+    function switchTab(e) {
+        e.preventDefault();
+        const tab = this.getAttribute("data-tab");
+        tabButtons.forEach(b => b.classList.remove("active"));
+        this.classList.add("active");
+        Object.keys(tabContents).forEach(key => {
+            tabContents[key].classList.toggle("active", key === tab);
+        });
+    }
+
+    tabButtons.forEach(btn => {
+        btn.setAttribute("type", "button");
+        btn.addEventListener("touchstart", switchTab, { passive: false });
+        btn.addEventListener("click", switchTab);
+    });
+
+    // Фото
+    function updatePhoto() {
+        const url = document.getElementById('photoURL').value.trim();
+        if (url.length > 5) document.getElementById('charPhoto').src = url;
+    }
+
+    // HP
+    let hpCurrent = 31, hpMax = 31;
+    function updateHP() {
+        document.getElementById('hpCounter').textContent = hpCurrent + " / " + hpMax;
+        document.getElementById('hpBar').style.width = (hpCurrent / hpMax * 100) + "%";
+    }
+    function changeHP(d) {
+        hpCurrent = Math.max(0, Math.min(hpMax, hpCurrent + d));
+        updateHP();
+    }
+    updateHP();
+
+    // Кости превосходства
+    let mpCurrent = 4, mpMax = 4;
+    function updateMP() {
+        document.getElementById('mpCounter').textContent = mpCurrent + " / " + mpMax;
+        document.getElementById('mpBar').style.width = (mpCurrent / mpMax * 100) + "%";
+    }
+    function changeMP(d) {
+        mpCurrent = Math.max(0, Math.min(mpMax, mpCurrent + d));
+        updateMP();
+    }
+    updateMP();
+
+    // Способности
+    const abilities = {
+        1: { cost: 1, cd: 1, timer: 0 },
+        2: { cost: 1, cd: 2, timer: 0 },
+        3: { cost: 1, cd: 1, timer: 0 },
+        4: { cost: 2, cd: 3, timer: 0 }
+    };
+
+    function useAbility(id) {
+        const ab = abilities[id];
+        if (ab.timer > 0) return;
+        if (mpCurrent < ab.cost) return;
+        mpCurrent -= ab.cost;
+        updateMP();
+        ab.timer = ab.cd;
+        const btn = document.getElementById('btn' + id);
+        const cdLabel = document.getElementById('cd' + id);
+        btn.disabled = true;
+        cdLabel.textContent = "КД: " + ab.timer + " раунд(ов)";
+    }
+
+    function nextRound() {
+        Object.keys(abilities).forEach(key => {
+            const id = parseInt(key);
+            const ab = abilities[id];
+            if (ab.timer > 0) {
+                ab.timer -= 1;
+                const btn = document.getElementById('btn' + id);
+                const cdLabel = document.getElementById('cd' + id);
+                if (ab.timer <= 0) {
+                    ab.timer = 0;
+                    btn.disabled = false;
+                    cdLabel.textContent = "Готово";
+                } else {
+                    cdLabel.textContent = "КД: " + ab.timer + " раунд(ов)";
+                }
+            }
+        });
+    }
+
+    // Баффы
+    function toggleBuff(el) {
+        el.classList.toggle("active");
+    }
+</script>
+</body>
+</html>
