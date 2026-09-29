@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Кассиан Прозорливый — Лист персонажа</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    body {
+        font-family: system-ui, -apple-system, sans-serif;
+        background: #050810;
+        color: #e5e7eb;
+        margin: 0;
+        padding: 10px;
+    }
+    .sheet {
+        max-width: 800px;
+        margin: 0 auto;
+        background: #0d1526;
+        border-radius: 12px;
+        padding: 12px;
+        border: 1px solid #1e3a8a;
+    }
+    h1 { margin: 0 0 4px 0; }
+    .subtitle { font-size: 0.9em; color: #fbbf24; margin-bottom: 8px; }
+
+    .tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        margin-bottom: 8px;
+    }
+    .tab-btn {
+        flex: 1 1 90px;
+        background: #1e3a8a;
+        border: 1px solid #fbbf24;
+        color: #fef3c7;
+        padding: 4px 6px;
+        border-radius: 999px;
+        cursor: pointer;
+        font-size: 0.85em;
+        text-align: center;
+    }
+    .tab-btn.active {
+        background: #fbbf24;
+        color: #0d1526;
+    }
+    .tab-content { display: none; margin-top: 8px; }
+    .tab-content.active { display: block; }
+
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .card {
+        flex: 1 1 240px;
+        background: #060b18;
+        border-radius: 8px;
+        padding: 8px;
+        border: 1px solid #1e3a8a;
+    }
+
+    .photo-block img {
+        width: 100%;
+        height: auto;
+        max-height: 220px;
+        object-fit: cover;
+        border-radius: 6px;
+        border: 1px solid #fbbf24;
+    }
+    .photo-input {
+        width: 100%;
+        background: #060b18;
+        border: 1px solid #334155;
+        border-radius: 4px;
+        padding: 4px;
+        color: #e5e7eb;
+        margin-top: 6px;
+        font-size: 0.8em;
+    }
+
+    .stat-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.9em;
+    }
+    .counter { font-size: 1.1em; font-weight: bold; }
+
+    button {
+        background: #fbbf24;
+        border: none;
+        color: #0d1526;
+        padding: 3px 6px;
+        margin: 0 2px 2px 0;
+        border-radius: 999px;
+        cursor: pointer;
+        font-size: 0.8em;
+    }
+    button:disabled {
+        background: #4b5563;
+        color: #9ca3af;
+        cursor: default;
+    }
+
+    .bar {
+        position: relative;
+        height: 12px;
+        background: #060b18;
+        border-radius: 999px;
+        overflow: hidden;
+        margin-top: 4px;
+        border: 1px solid #1e3a8a;
+    }
+    .bar-fill { height: 100%; width: 100%; }
+    .hp { background: linear-gradient(90deg, #ef4444, #b91c1c); }
+    .mp { background: linear-gradient(90deg, #fbbf24, #3b82f6); }
+
+    .ability {
+        background: #0a1226;
+        padding: 6px;
+        border-radius: 6px;
+        margin-bottom: 6px;
+        border: 1px solid #1e3a8a;
+        font-size: 0.85em;
+    }
+    .ability-title {
+        font-weight: bold;
+        color: #fbbf24;
+        margin-bottom: 4px;
+    }
+    .cooldown {
+        font-size: 0.75em;
+        color: #e0e7ff;
+        margin-top: 2px;
+    }
+
+    .buff {
+        background: #0a1226;
+        padding: 6px;
+        border-radius: 6px;
+        margin-bottom: 4px;
+        cursor: pointer;
+        border: 1px solid #1e3a8a;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.85em;
+    }
+    .buff-name { font-weight: bold; color: #fef3c7; }
+    .buff.active {
+        background: #1e3a8a;
+        border-color: #fbbf24;
+    }
+
+    .quick-stats {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        margin-top: 6px;
+    }
+    .quick-stat {
+        flex: 1 1 28%;
+        background: #131f3d;
+        border: 1px solid #3b82f6;
+        border-radius: 6px;
+        padding: 3px 4px;
+        text-align: center;
+        font-size: 0.75em;
+    }
+    .quick-stat .qs-name {
+        color: #bfdbfe;
+        display: block;
+        font-size: 0.85em;
+    }
+    .quick-stat .qs-val {
+        font-weight: bold;
+        font-size: 1.15em;
+        color: #fbbf24;
+    }
+
+    textarea {
+        width: 100%;
+        background: #060b18;
+        border: 1px solid #334155;
+        border-radius: 6px;
+        color: #e5e7eb;
+        padding: 6px;
+        resize: vertical;
+        min-height: 70px;
+        font-size: 0.85em;
+    }
+
+    @media (max-width: 600px) {
+        .card { flex: 1 1 100%; }
+        .tab-btn { flex: 1 1 45%; }
+        .quick-stat { flex: 1 1 30%; }
+    }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+    <h1>Кассиан Прозорливый</h1>
+    <div class="subtitle">Аасимар-волшебник. Видит будущее во снах. Спокоен, потому что уже знает, чем всё закончится.</div>
+
+    <div class="tabs">
+        <button type="button" class="tab-btn active" data-tab="stats">⚔️ Статы</button>
+        <button type="button" class="tab-btn" data-tab="inventory">🎒 Инвентарь</button>
+        <button type="button" class="tab-btn" data-tab="abilities">💥 Способности</button>
+        <button type="button" class="tab-btn" data-tab="buffs">✨ Баффы</button>
+        <button type="button" class="tab-btn" data-tab="story">📖 История</button>
+    </div>
+
+    <!-- СТАТЫ -->
+    <div id="tab-stats" class="tab-content active">
+        <div class="row">
+            <div class="card photo-block">
+                <h2>Фото</h2>
+                <img id="charPhoto" src="https://picsum.photos/seed/cassian/600/400" alt="Кассиан">
+                <input class="photo-input" id="photoURL" placeholder="URL изображения" oninput="updatePhoto()">
+            </div>
+
+            <div class="card">
+                <div class="stat-header">
+                    <h2>HP</h2>
+                    <div class="counter" id="hpCounter">18 / 18</div>
+                </div>
+                <div class="bar"><div class="bar-fill hp" id="hpBar"></div></div>
+                <button onclick="changeHP(-5)">-5</button>
+                <button onclick="changeHP(-1)">-1</button>
+                <button onclick="changeHP(1)">+1</button>
+                <button onclick="changeHP(5)">+5</button>
+            </div>
+
+            <div class="card">
+                <div class="stat-header">
+                    <h2>Ячейки</h2>
+                    <div class="counter" id="mpCounter">4 / 4</div>
+                </div>
+                <div class="bar"><div class="bar-fill mp" id="mpBar"></div></div>
+                <button onclick="changeMP(-3)">-3</button>
+                <button onclick="changeMP(-1)">-1</button>
+                <button onclick="changeMP(1)">+1</button>
+                <button onclick="changeMP(3)">+3</button>
+            </div>
+
+            <div class="card">
+                <h2>Данные</h2>
+                <ul style="padding-left:18px;font-size:0.85em;margin:4px 0;">
+                    <li><strong>Раса:</strong> Аасимар</li>
+                    <li><strong>Класс:</strong> Волшебник (Школа Прорицания)</li>
+                    <li><strong>Уровень:</strong> 3</li>
+                    <li><strong>Происхождение:</strong> Небесная Обитель, Хрустальный Пик</li>
+                </ul>
+
+                <h3 style="margin:8px 0 4px 0;font-size:0.9em;color:#bfdbfe;">Характеристики</h3>
+                <div class="quick-stats">
+                    <div class="quick-stat">
+                        <span class="qs-name">💪 Сила</span>
+                        <span class="qs-val">8 (-1)</span>
+                    </div>
+                    <div class="quick-stat">
+                        <span class="qs-name">🤸 Ловк</span>
+                        <span class="qs-val">14 (+2)</span>
+                    </div>
+                    <div class="quick-stat">
+                        <span class="qs-name">🛡 Тел</span>
+                        <span class="qs-val">14 (+2)</span>
+                    </div>
+                    <div class="quick-stat">
+                        <span class="qs-name">📚 Инт</span>
+                        <span class="qs-val">18 (+4)</span>
+                    </div>
+                    <div class="quick-stat">
+                        <span class="qs-name">👀 Мдр</span>
+                        <span class="qs-val">14 (+2)</span>
+                    </div>
+                    <div class="quick-stat">
+                        <span class="qs-name">😎 Хар</span>
+                        <span class="qs-val">12 (+1)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Характеристики (подробно)</h3>
+            <ul>
+                <li><strong>💪 Сила:</strong> 8 (-1) — «Мне не нужно оружие. У меня есть мысли.»</li>
+                <li><strong>🤸 Ловкость:</strong> 14 (+2)</li>
+                <li><strong>🛡 Телосложение:</strong> 14 (+2)</li>
+                <li><strong>📚 Интеллект:</strong> 18 (+4) — «Я подумаю. Уже подумал. Всё будет вот так.»</li>
+                <li><strong>👀 Мудрость:</strong> 14 (+2) — «Спокойствие — это не отсутствие эмоций, это их порядок.»</li>
+                <li><strong>😎 Харизма:</strong> 12 (+1) — говорит мало, но к нему прислушиваются</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h3>Боевые показатели</h3>
+            <ul>
+                <li><strong>🛡 Броня:</strong> 12 (мантия + ловкость)</li>
+                <li><strong>⚡ Инициатива:</strong> +2 (+ Портент)</li>
+                <li><strong>🏃 Скорость:</strong> 9 м (ровный, размеренный шаг)</li>
+                <li><strong>🎯 Бонус мастерства:</strong> +2</li>
+                <li><strong>👁 Пассивная внимательность:</strong> 14</li>
+            </ul>
+        </div>
+
+        <div class="row">
+            <div class="card" style="flex:100%">
+                <h2>Заметки</h2>
+                <textarea id="notes"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <!-- ИНВЕНТАРЬ -->
+    <div id="tab-inventory" class="tab-content">
+        <div class="row">
+            <div class="card" style="flex:100%">
+                <h2>Инвентарь</h2>
+                <ul style="padding-left:18px;font-size:0.85em;">
+                    <li><strong>Гримуар «Хроники Несказанного»</strong> — записи видений. Большая часть ещё не сбылась.</li>
+                    <li><strong>Хрустальный шар (маленький)</strong> — смотрит в него, когда думает. Иногда видит погоду.</li>
+                    <li><strong>Посох «Меридиан»</strong> — 1d6 дробящий. Тёплый на ощупь.</li>
+                    <li><strong>Небесный медальон</strong> — светится, когда рядом опасность. Или когда Кассиан доволен. Обычно и то и другое одновременно.</li>
+                    <li><strong>Колода карт Таро</strong> — сам нарисовал. Предсказывает точно. Иногда слишком точно.</li>
+                    <li><strong>Чайный набор</strong> — «Разговор начинается с чая. Всегда.»</li>
+                    <li><strong>Дневник снов</strong> — 214 записей. 211 сбылись. Остальные три — на следующей неделе.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- СПОСОБНОСТИ -->
+    <div id="tab-abilities" class="tab-content">
+        <div class="row">
+            <div class="card" style="flex:100%">
+                <h2>Способности</h2>
+
+                <div class="ability" id="ab1">
+                    <div class="ability-title">Портент Судьбы</div>
+                    <p>В начале дня Кассиан кидает два d20 и запоминает результаты. В любой момент он может заменить ими чужой бросок — свой или врага. Он просто знает, что должно выпасть.</p>
+                    <p><strong>Стоимость:</strong> 2 ячейки, <strong>КД:</strong> 3 раунда</p>
+                    <button id="btn1" onclick="useAbility(1)">Использовать</button>
+                    <div class="cooldown" id="cd1"></div>
+                </div>
+
+                <div class="ability" id="ab2">
+                    <div class="ability-title">Волшебная Стрела</div>
+                    <p>3 снаряда по 1d4+1 силового урона. Кассиан обычно говорит: «Я видел этот момент вчера. Всё пройдёт гладко» — и оно действительно проходит гладко.</p>
+                    <p><strong>Стоимость:</strong> 1 ячейка, <strong>КД:</strong> 1 раунд</p>
+                    <button id="btn2" onclick="useAbility(2)">Использовать</button>
+                    <div class="cooldown" id="cd2"></div>
+                </div>
+
+                <div class="ability" id="ab3">
+                    <div class="ability-title">Щит Предвидения</div>
+                    <p>Реакция: +5 к броне до конца раунда. Кассиан не уклоняется — он просто стоит там, где удар не пройдёт.</p>
+                    <p><strong>Стоимость:</strong> 1 ячейка, <strong>КД:</strong> 1 раунд</p>
+                    <button id="btn3" onclick="useAbility(3)">Использовать</button>
+                    <div class="cooldown" id="cd3"></div>
+                </div>
+
+                <div class="ability" id="ab4">
+                    <div class="ability-title">Пророческий Взгляд</div>
+                    <p>Кассиан читает мысли врага или видит его ближайшее действие. Враг делает спасбросок Мудрости или получает 2d6 психического урона и помеху на атаку. Кассиан при этом молчит и слегка улыбается.</p>
+                    <p><strong>Стоимость:</strong> 2 ячейки, <strong>КД:</strong> 3 раунда</p>
+                    <button id="btn4" onclick="useAbility(4)">Использовать</button>
+                    <div class="cooldown" id="cd4"></div>
+                </div>
+
+                <button style="margin-top:6px;width:100%" onclick="nextRound()">Раунд +1 (уменьшить КД)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- БАФФЫ -->
+    <div id="tab-buffs" class="tab-content">
+        <div class="row">
+            <div class="card" style="flex:100%">
+                <h2>Баффы</h2>
+                <div class="buff" onclick="toggleBuff(this)">
+                    <div><span class="buff-name">Ясный Ум</span> — +1 к Интеллекту. Всегда спокоен, всегда думает.</div>
+                </div>
+                <div class="buff" onclick="toggleBuff(this)">
+                    <div><span class="buff-name">Небесное Наследие</span> — +1 к спасброскам от очарования. Небо хранит своих.</div>
+                </div>
+                <div class="buff" onclick="toggleBuff(this)">
+                    <div><span class="buff-name">Предвидение</span> — +1 к инициативе. Он уже знает, что сейчас будет.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ИСТОРИЯ -->
+    <div id="tab-story" class="tab-content">
+        <div class="row">
+            <div class="card" style="flex:100%">
+                <h2>История</h2>
+                <p style="font-size:0.85em;">
+                    Кассиан родился на Хрустальном Пике, в Небесной Обители — месте, где аасимары
+                    учатся понимать волю небес. Его отец был смертным мудрецом, мать — небесной
+                    посланницей. Кассиан унаследовал от неё свет в глазах, а от отца — привычку
+                    думать, прежде чем говорить. Первое слово он сказал в три года. Это было:
+                    «Подожди». С тех пор это его любимое слово.
+                </p>
+                <p style="font-size:0.85em;">
+                    В детстве ему начали сниться сны. Не обычные — такие, которые сбывались.
+                    Сначала мелочи: какая погода будет завтра, кто придёт в гости, что сварят
+                    на ужин. Потом — больше. Кассиан видел, как упадёт дерево, как проиграет
+                    спор сосед, как начнётся буря. Он не пугался. Он записывал.
+                    К двенадцати годам у него было 211 сбывшихся снов. Три оставшихся он
+                    до сих пор ждёт.
+                </p>
+                <p style="font-size:0.85em;">
+                    Наставники Обители говорили: «Ты слишком спокоен для своего дара. Дар
+                    предвидения сводит людей с ума». Кассиан отвечал: «А зачем нервничать,
+                    если я уже знаю, что всё будет хорошо?» Наставники не находили, что
+                    возразить. Так он и остался — самым спокойным и самым умным учеником
+                    Обители. Единственный, кто ни разу не ошибся на экзамене. Потому что
+                    он уже знал вопросы.
+                </p>
+                <p style="font-size:0.85em;">
+                    Однажды ему приснился сон, в котором он видел отряд — громкого полурослика,
+                    серьёзного дварфа, обаятельную эльфийку, невозмутимого тифлинга и
+                    взбалмошного гнома. Они стояли на краю чего-то важного. Кассиан проснулся,
+                    допил чай, собрал вещи и пошёл их искать. Он знал, куда идти. Он всегда
+                    знает.
+                </p>
+                <p style="font-size:0.85em;">
+                    Теперь он с отрядом. Говорит редко, но к его словам прислушиваются.
+                    На вопрос «Что делать?» отвечает: «Подождите. Я подумаю». Через минуту
+                    выдаёт решение. Оно всегда верное. Его любимая фраза: «Спокойствие —
+                    это не отсутствие эмоций. Это их порядок».
+                </p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Вкладки (iPhone-friendly)
+    const tabButtons = document.querySelectorAll(".tab-btn");
+    const tabContents = {
+        stats: document.getElementById("tab-stats"),
+        inventory: document.getElementById("tab-inventory"),
+        abilities: document.getElementById("tab-abilities"),
+        buffs: document.getElementById("tab-buffs"),
+        story: document.getElementById("tab-story")
+    };
+
+    function switchTab(e) {
+        e.preventDefault();
+        const tab = this.getAttribute("data-tab");
+        tabButtons.forEach(b => b.classList.remove("active"));
+        this.classList.add("active");
+        Object.keys(tabContents).forEach(key => {
+            tabContents[key].classList.toggle("active", key === tab);
+        });
+    }
+
+    tabButtons.forEach(btn => {
+        btn.setAttribute("type", "button");
+        btn.addEventListener("touchstart", switchTab, { passive: false });
+        btn.addEventListener("click", switchTab);
+    });
+
+    // Фото
+    function updatePhoto() {
+        const url = document.getElementById('photoURL').value.trim();
+        if (url.length > 5) document.getElementById('charPhoto').src = url;
+    }
+
+    // HP
+    let hpCurrent = 18, hpMax = 18;
+    function updateHP() {
+        document.getElementById('hpCounter').textContent = hpCurrent + " / " + hpMax;
+        document.getElementById('hpBar').style.width = (hpCurrent / hpMax * 100) + "%";
+    }
+    function changeHP(d) {
+        hpCurrent = Math.max(0, Math.min(hpMax, hpCurrent + d));
+        updateHP();
+    }
+    updateHP();
+
+    // Ячейки
+    let mpCurrent = 4, mpMax = 4;
+    function updateMP() {
+        document.getElementById('mpCounter').textContent = mpCurrent + " / " + mpMax;
+        document.getElementById('mpBar').style.width = (mpCurrent / mpMax * 100) + "%";
+    }
+    function changeMP(d) {
+        mpCurrent = Math.max(0, Math.min(mpMax, mpCurrent + d));
+        updateMP();
+    }
+    updateMP();
+
+    // Способности
+    const abilities = {
+        1: { cost: 2, cd: 3, timer: 0 },
+        2: { cost: 1, cd: 1, timer: 0 },
+        3: { cost: 1, cd: 1, timer: 0 },
+        4: { cost: 2, cd: 3, timer: 0 }
+    };
+
+    function useAbility(id) {
+        const ab = abilities[id];
+        if (ab.timer > 0) return;
+        if (mpCurrent < ab.cost) return;
+        mpCurrent -= ab.cost;
+        updateMP();
+        ab.timer = ab.cd;
+        const btn = document.getElementById('btn' + id);
+        const cdLabel = document.getElementById('cd' + id);
+        btn.disabled = true;
+        cdLabel.textContent = "КД: " + ab.timer + " раунд(ов)";
+    }
+
+    function nextRound() {
+        Object.keys(abilities).forEach(key => {
+            const id = parseInt(key);
+            const ab = abilities[id];
+            if (ab.timer > 0) {
+                ab.timer -= 1;
+                const btn = document.getElementById('btn' + id);
+                const cdLabel = document.getElementById('cd' + id);
+                if (ab.timer <= 0) {
+                    ab.timer = 0;
+                    btn.disabled = false;
+                    cdLabel.textContent = "Готово";
+                } else {
+                    cdLabel.textContent = "КД: " + ab.timer + " раунд(ов)";
+                }
+            }
+        });
+    }
+
+    // Баффы
+    function toggleBuff(el) {
+        el.classList.toggle("active");
+    }
+</script>
+</body>
+</html>
