@@ -153,6 +153,32 @@
         border-color: #34d399;
     }
 
+    .quick-stats {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        margin-top: 6px;
+    }
+    .quick-stat {
+        flex: 1 1 28%;
+        background: #0f2c1c;
+        border: 1px solid #34d399;
+        border-radius: 6px;
+        padding: 3px 4px;
+        text-align: center;
+        font-size: 0.75em;
+    }
+    .quick-stat .qs-name {
+        color: #a7f3d0;
+        display: block;
+        font-size: 0.85em;
+    }
+    .quick-stat .qs-val {
+        font-weight: bold;
+        font-size: 1.15em;
+        color: #fbbf24;
+    }
+
     textarea {
         width: 100%;
         background: #03120b;
@@ -168,6 +194,7 @@
     @media (max-width: 600px) {
         .card { flex: 1 1 100%; }
         .tab-btn { flex: 1 1 45%; }
+        .quick-stat { flex: 1 1 30%; }
     }
 </style>
 </head>
@@ -220,17 +247,45 @@
 
             <div class="card">
                 <h2>Данные</h2>
-                <ul style="padding-left:18px;font-size:0.85em;">
+                <ul style="padding-left:18px;font-size:0.85em;margin:4px 0;">
                     <li><strong>Раса:</strong> Лесной эльф</li>
                     <li><strong>Класс:</strong> Бард (Коллегия Очарования)</li>
                     <li><strong>Уровень:</strong> 3</li>
                     <li><strong>Происхождение:</strong> Серебряный Лес, дом Легколистов</li>
                 </ul>
+
+                <h3 style="margin:8px 0 4px 0;font-size:0.9em;color:#a7f3d0;">Характеристики</h3>
+                <div class="quick-stats">
+                    <div class="quick-stat">
+                        <span class="qs-name">💪 Сила</span>
+                        <span class="qs-val">8 (-1)</span>
+                    </div>
+                    <div class="quick-stat">
+                        <span class="qs-name">🤸 Ловк</span>
+                        <span class="qs-val">16 (+3)</span>
+                    </div>
+                    <div class="quick-stat">
+                        <span class="qs-name">🛡 Тел</span>
+                        <span class="qs-val">12 (+1)</span>
+                    </div>
+                    <div class="quick-stat">
+                        <span class="qs-name">📚 Инт</span>
+                        <span class="qs-val">13 (+1)</span>
+                    </div>
+                    <div class="quick-stat">
+                        <span class="qs-name">👀 Мдр</span>
+                        <span class="qs-val">10 (+0)</span>
+                    </div>
+                    <div class="quick-stat">
+                        <span class="qs-name">😎 Хар</span>
+                        <span class="qs-val">18 (+4)</span>
+                    </div>
+                </div>
             </div>
         </div>
 
         <div class="card">
-            <h3>Характеристики</h3>
+            <h3>Характеристики (подробно)</h3>
             <ul>
                 <li><strong>💪 Сила:</strong> 8 (-1) — «Я не слабая, я изящная!»</li>
                 <li><strong>🤸 Ловкость:</strong> 16 (+3)</li>
