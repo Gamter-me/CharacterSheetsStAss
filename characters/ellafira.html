@@ -2,129 +2,100 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<title>Эллафира Листопляска — Лист персонажа</title>
+<title>Лиэрин Легколист — Лист персонажа</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <style>
     body {
-        font-family: "Segoe UI", sans-serif;
-        background: radial-gradient(circle at top, #0b1b16 0, #05080a 60%);
+        font-family: system-ui, -apple-system, sans-serif;
+        background: #05100a;
         color: #e5e7eb;
         margin: 0;
         padding: 10px;
     }
     .sheet {
-        max-width: 900px;
+        max-width: 800px;
         margin: 0 auto;
-        background: rgba(12, 20, 18, 0.95);
-        border-radius: 16px;
-        padding: 15px;
-        box-shadow: 0 0 40px rgba(0,0,0,0.9);
-        border: 1px solid #1f3b30;
-        position: relative;
-        overflow: hidden;
+        background: #0a1a12;
+        border-radius: 12px;
+        padding: 12px;
+        border: 1px solid #14532d;
     }
-    .sheet::before {
-        content: "✶";
-        position: absolute;
-        top: 8px;
-        right: 12px;
-        color: #38b2ac;
-        font-size: 1.4em;
-        opacity: 0.7;
-    }
-    .sheet::after {
-        content: "⟡";
-        position: absolute;
-        bottom: 8px;
-        left: 12px;
-        color: #a7f3d0;
-        font-size: 1.2em;
-        opacity: 0.6;
-    }
-
     h1 { margin: 0 0 4px 0; }
-    h2 { margin-top: 0; }
-    .subtitle { font-size: 0.9em; color: #9ca3af; margin-bottom: 10px; }
+    .subtitle { font-size: 0.9em; color: #86efac; margin-bottom: 8px; }
 
     .tabs {
         display: flex;
         flex-wrap: wrap;
-        gap: 6px;
-        margin-bottom: 10px;
+        gap: 4px;
+        margin-bottom: 8px;
     }
     .tab-btn {
-        flex: 1 1 100px;
-        background: #064e3b;
-        border: 1px solid #10b981;
+        flex: 1 1 90px;
+        background: #14532d;
+        border: 1px solid #34d399;
         color: #d1fae5;
-        padding: 6px 8px;
+        padding: 4px 6px;
         border-radius: 999px;
         cursor: pointer;
-        font-size: 0.9em;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 6px;
+        font-size: 0.85em;
+        text-align: center;
     }
     .tab-btn.active {
         background: #10b981;
-        color: #022c22;
-        box-shadow: 0 0 10px rgba(16,185,129,0.7);
+        color: #052e16;
     }
-
-    .tab-content { display: none; margin-top: 10px; }
+    .tab-content { display: none; margin-top: 8px; }
     .tab-content.active { display: block; }
 
     .row {
         display: flex;
         flex-wrap: wrap;
-        gap: 15px;
+        gap: 10px;
     }
     .card {
-        flex: 1 1 260px;
-        background: #111827;
-        border-radius: 12px;
-        padding: 15px;
-        border: 1px solid #1f2937;
-        position: relative;
+        flex: 1 1 240px;
+        background: #03120b;
+        border-radius: 8px;
+        padding: 8px;
+        border: 1px solid #14532d;
     }
 
     .photo-block img {
         width: 100%;
         height: auto;
-        max-height: 260px;
+        max-height: 220px;
         object-fit: cover;
-        border-radius: 10px;
-        border: 2px solid #059669;
+        border-radius: 6px;
+        border: 1px solid #34d399;
     }
     .photo-input {
         width: 100%;
-        background: #020617;
+        background: #03120b;
         border: 1px solid #334155;
-        border-radius: 6px;
-        padding: 6px;
+        border-radius: 4px;
+        padding: 4px;
         color: #e5e7eb;
-        margin-top: 10px;
-        font-size: 0.85em;
+        margin-top: 6px;
+        font-size: 0.8em;
     }
 
     .stat-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        font-size: 0.9em;
     }
-    .counter { font-size: 1.4em; font-weight: bold; }
+    .counter { font-size: 1.1em; font-weight: bold; }
 
     button {
         background: #10b981;
         border: none;
-        color: #022c22;
-        padding: 4px 8px;
-        margin: 0 2px;
+        color: #052e16;
+        padding: 3px 6px;
+        margin: 0 2px 2px 0;
         border-radius: 999px;
         cursor: pointer;
-        font-size: 0.85em;
+        font-size: 0.8em;
     }
     button:disabled {
         background: #4b5563;
@@ -134,65 +105,64 @@
 
     .bar {
         position: relative;
-        height: 16px;
-        background: #020617;
+        height: 12px;
+        background: #03120b;
         border-radius: 999px;
         overflow: hidden;
-        margin-top: 8px;
-        border: 1px solid #1f2937;
+        margin-top: 4px;
+        border: 1px solid #14532d;
     }
     .bar-fill { height: 100%; width: 100%; }
     .hp { background: linear-gradient(90deg, #ef4444, #b91c1c); }
-    .mp { background: linear-gradient(90deg, #3b82f6, #1d4ed8); }
+    .mp { background: linear-gradient(90deg, #fbbf24, #d97706); }
 
     .ability {
-        background: #1f2937;
-        padding: 10px;
-        border-radius: 10px;
-        margin-bottom: 10px;
-        border: 1px solid #374151;
+        background: #071a10;
+        padding: 6px;
+        border-radius: 6px;
+        margin-bottom: 6px;
+        border: 1px solid #14532d;
+        font-size: 0.85em;
     }
     .ability-title {
         font-weight: bold;
-        color: #a7f3d0;
-        margin-bottom: 6px;
+        color: #fbbf24;
+        margin-bottom: 4px;
     }
     .cooldown {
-        font-size: 0.85em;
-        color: #9ca3af;
-        margin-top: 4px;
+        font-size: 0.75em;
+        color: #86efac;
+        margin-top: 2px;
     }
 
     .buff {
-        background: #0f172a;
-        padding: 10px;
-        border-radius: 10px;
-        margin-bottom: 8px;
+        background: #071a10;
+        padding: 6px;
+        border-radius: 6px;
+        margin-bottom: 4px;
         cursor: pointer;
-        border: 1px solid #1f2937;
+        border: 1px solid #14532d;
         display: flex;
         justify-content: space-between;
         align-items: center;
+        font-size: 0.85em;
     }
-    .buff-left { max-width: 80%; }
     .buff-name { font-weight: bold; color: #a7f3d0; }
-    .buff-icon { font-size: 1.2em; }
     .buff.active {
-        background: #064e3b;
-        border-color: #10b981;
-        box-shadow: 0 0 10px rgba(16,185,129,0.7);
+        background: #14532d;
+        border-color: #34d399;
     }
 
     textarea {
         width: 100%;
-        background: #020617;
+        background: #03120b;
         border: 1px solid #334155;
-        border-radius: 8px;
+        border-radius: 6px;
         color: #e5e7eb;
-        padding: 8px;
+        padding: 6px;
         resize: vertical;
-        min-height: 80px;
-        font-size: 0.9em;
+        min-height: 70px;
+        font-size: 0.85em;
     }
 
     @media (max-width: 600px) {
@@ -201,37 +171,35 @@
     }
 </style>
 </head>
-
 <body>
 <div class="sheet">
 
-    <h1>Эллафира Листопляска</h1>
-    <div class="subtitle">✨ Эльфийка-бард из Изумрудного Круга. Любит шутки, песни и хаос.</div>
+    <h1>Лиэрин Легколист</h1>
+    <div class="subtitle">Эльфийка-бард. Не друид, но очень старалась. Кусь на плече.</div>
 
     <div class="tabs">
-        <button class="tab-btn active" data-tab="stats">⚔️ Статы</button>
-        <button class="tab-btn" data-tab="inventory">🎒 Инвентарь</button>
-        <button class="tab-btn" data-tab="abilities">🎶 Способности</button>
-        <button class="tab-btn" data-tab="buffs">✨ Баффы</button>
-        <button class="tab-btn" data-tab="story">📖 Предыстория</button>
+        <button type="button" class="tab-btn active" data-tab="stats">⚔️ Статы</button>
+        <button type="button" class="tab-btn" data-tab="inventory">🎒 Инвентарь</button>
+        <button type="button" class="tab-btn" data-tab="abilities">💥 Способности</button>
+        <button type="button" class="tab-btn" data-tab="buffs">✨ Баффы</button>
+        <button type="button" class="tab-btn" data-tab="story">📖 История</button>
     </div>
 
     <!-- СТАТЫ -->
     <div id="tab-stats" class="tab-content active">
         <div class="row">
             <div class="card photo-block">
-                <h2>Фото персонажа</h2>
-                <img id="charPhoto" src="https://i.imgur.com/4ZQZ4Zy.jpeg" alt="Фото персонажа">
-                <input class="photo-input" id="photoURL" placeholder="Вставьте URL изображения" oninput="updatePhoto()">
+                <h2>Фото</h2>
+                <img id="charPhoto" src="https://picsum.photos/seed/lierin/600/400" alt="Лиэрин">
+                <input class="photo-input" id="photoURL" placeholder="URL изображения" oninput="updatePhoto()">
             </div>
 
             <div class="card">
                 <div class="stat-header">
-                    <h2>Здоровье (HP)</h2>
-                    <div class="counter" id="hpCounter">32 / 32</div>
+                    <h2>HP</h2>
+                    <div class="counter" id="hpCounter">21 / 21</div>
                 </div>
                 <div class="bar"><div class="bar-fill hp" id="hpBar"></div></div>
-                <br>
                 <button onclick="changeHP(-5)">-5</button>
                 <button onclick="changeHP(-1)">-1</button>
                 <button onclick="changeHP(1)">+1</button>
@@ -240,11 +208,10 @@
 
             <div class="card">
                 <div class="stat-header">
-                    <h2>Мана (MP)</h2>
-                    <div class="counter" id="mpCounter">18 / 18</div>
+                    <h2>Вдохновение</h2>
+                    <div class="counter" id="mpCounter">4 / 4</div>
                 </div>
                 <div class="bar"><div class="bar-fill mp" id="mpBar"></div></div>
-                <br>
                 <button onclick="changeMP(-3)">-3</button>
                 <button onclick="changeMP(-1)">-1</button>
                 <button onclick="changeMP(1)">+1</button>
@@ -252,21 +219,43 @@
             </div>
 
             <div class="card">
-                <h2>Основные данные</h2>
-                <ul>
-                    <li><strong>Имя:</strong> Эллафира Листопляска</li>
-                    <li><strong>Раса:</strong> Эльф</li>
-                    <li><strong>Класс:</strong> Бард</li>
+                <h2>Данные</h2>
+                <ul style="padding-left:18px;font-size:0.85em;">
+                    <li><strong>Раса:</strong> Лесной эльф</li>
+                    <li><strong>Класс:</strong> Бард (Коллегия Очарования)</li>
                     <li><strong>Уровень:</strong> 3</li>
-                    <li><strong>Происхождение:</strong> Изумрудный Круг</li>
+                    <li><strong>Происхождение:</strong> Серебряный Лес, дом Легколистов</li>
                 </ul>
             </div>
+        </div>
+
+        <div class="card">
+            <h3>Характеристики</h3>
+            <ul>
+                <li><strong>💪 Сила:</strong> 8 (-1) — «Я не слабая, я изящная!»</li>
+                <li><strong>🤸 Ловкость:</strong> 16 (+3)</li>
+                <li><strong>🛡 Телосложение:</strong> 12 (+1)</li>
+                <li><strong>📚 Интеллект:</strong> 13 (+1)</li>
+                <li><strong>👀 Мудрость:</strong> 10 (+0) — «У меня отличная интуиция! ...наверное»</li>
+                <li><strong>😎 Харизма:</strong> 18 (+4)</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h3>Боевые показатели</h3>
+            <ul>
+                <li><strong>🛡 Броня:</strong> 14 (кожа + ловкость + наглость)</li>
+                <li><strong>⚡ Инициатива:</strong> +3</li>
+                <li><strong>🏃 Скорость:</strong> 9 м (эльфийская грация)</li>
+                <li><strong>🎯 Бонус мастерства:</strong> +2</li>
+                <li><strong>👁 Пассивная внимательность:</strong> 12</li>
+            </ul>
         </div>
 
         <div class="row">
             <div class="card" style="flex:100%">
                 <h2>Заметки</h2>
-                <textarea id="notes" placeholder="Ваши заметки по Эллафире..."></textarea>
+                <textarea id="notes"></textarea>
             </div>
         </div>
     </div>
@@ -275,82 +264,59 @@
     <div id="tab-inventory" class="tab-content">
         <div class="row">
             <div class="card" style="flex:100%">
-                <h2>Инвентарь 🎒</h2>
-                <ul>
-                    <li><strong>Лютня «Смехолёт»</strong> — усиливает песни, добавляет комичный резонанс.</li>
-                    <li><strong>Плащ Лесного Шёпота</strong> — +1 к скрытности.</li>
-                    <li><strong>Зелье бодрости</strong> — восстанавливает 1d6 HP.</li>
-                    <li><strong>Мешочек блёсток</strong> — отвлекает врагов.</li>
-                    <li><strong>Амулет Изумрудного Круга</strong> — символ ордена.</li>
+                <h2>Инвентарь</h2>
+                <ul style="padding-left:18px;font-size:0.85em;">
+                    <li><strong>Лютня «Судьба»</strong> — 1d6 дробящий. Держится на честном слове, скотче и надежде.</li>
+                    <li><strong>Плащ «Я не эльф, я просто высокий»</strong> — маскировка. Работает на удивление плохо.</li>
+                    <li><strong>Зелье «Уверенность в себе»</strong> — на самом деле вода. Но помогает.</li>
+                    <li><strong>Дневник обид</strong> — исписано 3 страницы из 200. Места ещё много.</li>
+                    <li><strong>Лесной медальон</strong> — подарок мамы. Иногда светится. Никто не знает почему.</li>
+                    <li><strong>Мешочек с орехами</strong> — для Кусь. Если не кормить, будет кусать.</li>
+                    <li><strong>Колода карт «Для честных игр»</strong> — некоторые карты помечены.</li>
                 </ul>
             </div>
         </div>
     </div>
 
-    <!-- СПОСОБНОСТИ (БОЕВОЙ МОДУЛЬ) -->
+    <!-- СПОСОБНОСТИ -->
     <div id="tab-abilities" class="tab-content">
         <div class="row">
             <div class="card" style="flex:100%">
-                <h2>Способности 🎶</h2>
+                <h2>Способности</h2>
 
-                <!-- Песнь Пересмешницы -->
                 <div class="ability" id="ab1">
-                    <div class="ability-title">Песнь Пересмешницы</div>
-                    <p>
-                        Эллафира играет игривую мелодию, которая вдохновляет союзников и сбивает врагов с толку.
-                        Союзники получают <strong>+1 к атаке</strong>, <strong>+1 к проверкам Харизмы</strong>,
-                        и <strong>+1 к инициативе</strong>, если песнь начата до боя.
-                    </p>
-                    <p><strong>Стоимость:</strong> 2 маны<br>
-                       <strong>Коллдаун:</strong> 2 раунда<br>
-                       <strong>Длительность:</strong> 2 раунда</p>
+                    <div class="ability-title">Песнь Оскорблений</div>
+                    <p>1d6 психического урона. Враг получает помеху на следующую атаку. Лиэрин поёт обидную песню про его внешность, родословную и манеру держать оружие.</p>
+                    <p><strong>Стоимость:</strong> 1 вдохновения, <strong>КД:</strong> 1 раунд</p>
                     <button id="btn1" onclick="useAbility(1)">Использовать</button>
                     <div class="cooldown" id="cd1"></div>
                 </div>
 
-                <!-- Листовой Прыжок -->
                 <div class="ability" id="ab2">
-                    <div class="ability-title">Листовой Прыжок</div>
-                    <p>
-                        Эллафира исчезает в вихре зелёных искр и появляется в другом месте.
-                        Получает <strong>-1d4 входящего урона</strong> на следующий удар.
-                        Если прыжок проходит через врага — он теряет реакцию до конца раунда.
-                    </p>
-                    <p><strong>Стоимость:</strong> 1 мана<br>
-                       <strong>Коллдаун:</strong> 1 раунд</p>
+                    <div class="ability-title">Очаровательная Улыбка</div>
+                    <p>Враг делает спасбросок Мудрости или очарован на 1 минуту. Лиэрин просто улыбается и говорит комплимент. Работает даже на скелетов (не спрашивайте как).</p>
+                    <p><strong>Стоимость:</strong> 2 вдохновения, <strong>КД:</strong> 2 раунда</p>
                     <button id="btn2" onclick="useAbility(2)">Использовать</button>
                     <div class="cooldown" id="cd2"></div>
                 </div>
 
-                <!-- Звонкий Хохот -->
                 <div class="ability" id="ab3">
-                    <div class="ability-title">Звонкий Хохот</div>
-                    <p>
-                        Эллафира хохочет так громко, что враг теряет концентрацию.
-                        Враг получает <strong>-2 к урону</strong> на 1 раунд.
-                        Заклинатели проходят проверку концентрации с помехой.
-                    </p>
-                    <p><strong>Стоимость:</strong> 2 маны<br>
-                       <strong>Коллдаун:</strong> 2 раунда</p>
+                    <div class="ability-title">Слово Вдохновения</div>
+                    <p>Союзник получает 1d6 к следующему броску. Лиэрин кричит: «ДАВАЙ, ТЫ МОЖЕШЬ, Я В ТЕБЯ ВЕРЮ!» — и это почему-то действительно работает.</p>
+                    <p><strong>Стоимость:</strong> 1 вдохновения, <strong>КД:</strong> 1 раунд</p>
                     <button id="btn3" onclick="useAbility(3)">Использовать</button>
                     <div class="cooldown" id="cd3"></div>
                 </div>
 
-                <!-- Шёпот Круга -->
                 <div class="ability" id="ab4">
-                    <div class="ability-title">Шёпот Круга</div>
-                    <p>
-                        Эллафира связывается с духами леса.
-                        Союзник получает <strong>+2 к проверке Мудрости или Интеллекта</strong>.
-                        Растения рядом могут отвлечь врага (минус 1 к инициативе).
-                    </p>
-                    <p><strong>Стоимость:</strong> 3 маны<br>
-                       <strong>Коллдаун:</strong> 3 раунда</p>
+                    <div class="ability-title">Дуэт с Кусь</div>
+                    <p>Лиэрин призывает белку Кусь. Кусь царапает врага (2d4 урона) и отвлекает его (помеха на следующую атаку). Кусь работает за орехи.</p>
+                    <p><strong>Стоимость:</strong> 2 вдохновения, <strong>КД:</strong> 3 раунда</p>
                     <button id="btn4" onclick="useAbility(4)">Использовать</button>
                     <div class="cooldown" id="cd4"></div>
                 </div>
 
-                <button style="margin-top:10px;width:100%" onclick="nextRound()">Раунд +1 (уменьшить коллдауны)</button>
+                <button style="margin-top:6px;width:100%" onclick="nextRound()">Раунд +1 (уменьшить КД)</button>
             </div>
         </div>
     </div>
@@ -359,61 +325,48 @@
     <div id="tab-buffs" class="tab-content">
         <div class="row">
             <div class="card" style="flex:100%">
-                <h2>Баффы ✨</h2>
+                <h2>Баффы</h2>
                 <div class="buff" onclick="toggleBuff(this)">
-                    <div class="buff-left">
-                        <div class="buff-name">Вдохновение</div>
-                        +1 к атаке.
-                    </div>
-                    <div class="buff-icon">⭐</div>
+                    <div><span class="buff-name">Эльфийская Грация</span> — +1 к Ловкости. Врождённое.</div>
                 </div>
                 <div class="buff" onclick="toggleBuff(this)">
-                    <div class="buff-left">
-                        <div class="buff-name">Лесной Шёпот</div>
-                        +1 к скрытности.
-                    </div>
-                    <div class="buff-icon">🌿</div>
+                    <div><span class="buff-name">Обаяние</span> — +1 к убеждению. Работает, пока Лиэрин не начнёт паниковать.</div>
                 </div>
                 <div class="buff" onclick="toggleBuff(this)">
-                    <div class="buff-left">
-                        <div class="buff-name">Усталость</div>
-                        -1 к проверкам.
-                    </div>
-                    <div class="buff-icon">💤</div>
+                    <div><span class="buff-name">Кусь на плече</span> — +1 к удаче. Кусь приносит удачу. Или хотя бы орехи.</div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ПРЕДЫСТОРИЯ -->
+    <!-- ИСТОРИЯ -->
     <div id="tab-story" class="tab-content">
         <div class="row">
             <div class="card" style="flex:100%">
-                <h2>Предыстория 📖</h2>
-                <p>
-                    Эллафира Листопляска родилась в глубине Изумрудного Круга — древнего лесного братства,
-                    где деревья выше башен, а тропы меняются местами, если идти по ним без уважения.
+                <h2>История</h2>
+                <p style="font-size:0.85em;">
+                    Лиэрин Легколист родилась в Серебряном Лесу в семье потомственных друидов.
+                    Мать — верховная жрица, отец — хранитель Древа Жизни, бабушка — легендарная целительница.
+                    Лиэрин должна была стать великой друидкой. Вместо этого она подожгла священную рощу
+                    (случайно), утопила церемониальный жезл в пруду (случайно) и призвала вместо духа‑покровителя
+                    стаю разъярённых пчёл (тоже случайно). Пчёлы загнали весь совет старейшин в озеро.
                 </p>
-                <p>
-                    С ранних лет она была… странной. Пока другие эльфийские дети учились слушать ветер,
-                    Эллафира пыталась его смешить. Пока наставники учили её медитировать, она сочиняла песни
-                    о том, как медитация скучна. И когда пришло время выбрать путь — она выбрала путь барда.
+                <p style="font-size:0.85em;">
+                    Лиэрин объявили «находящейся в духовном поиске» — что на эльфийском означает
+                    «пожалуйста, уйди подальше и не возвращайся, пока не станешь нормальной».
+                    С тех пор Лиэрин путешествует, играет на лютне, которую держит вместе надежда и скотч,
+                    и уверена, что рано или поздно её «истинная магия» проявится.
                 </p>
-                <p>
-                    Изумрудный Круг не возражал: каждый лист растёт по‑своему. Но Эллафира росла так,
-                    будто её поливали не водой, а искрами хаоса. Она стала известна благодаря своему
-                    «Смехолёту» — лютне, которая звучит так, будто сама пытается рассказать шутку.
+                <p style="font-size:0.85em;">
+                    Пока что её единственное настоящее заклинание — это умение убедить кого угодно,
+                    что всё идёт по плану. У неё есть белка по имени Кусь, которая следует за ней повсюду
+                    и ворует еду. Лиэрин считает, что это её дух‑покровитель. Кусь считает,
+                    что Лиэрин — это ходячий шведский стол.
                 </p>
-                <p>
-                    С этой лютней Эллафира путешествовала по лесам, городам и трактирам, собирая истории,
-                    друзей и случайные неприятности. Её хохот однажды сорвал ритуал некроманта. Её песня
-                    заставила тролля задуматься о смысле жизни. А её Листовой Прыжок — фирменный вихрь
-                    зелёных искр — стал символом того, что даже хаос может быть красивым.
-                </p>
-                <p>
-                    Сейчас Эллафира отправилась в новое приключение — туда, где Изумрудный Круг сталкивается
-                    с силами, которые не смеются. Она не знает, что ждёт впереди. Но уверена в одном:
-                    если судьба не хочет шутить — она будет шутить сама.
+                <p style="font-size:0.85em;">
+                    Теперь она с отрядом, играет на лютне, вдохновляет друзей и всегда готова сказать:
+                    «Я не провалила магию, я просто нашла свой путь. И этот путь — быть невероятно
+                    обаятельной!».
                 </p>
             </div>
         </div>
@@ -422,7 +375,7 @@
 </div>
 
 <script>
-    // Вкладки
+    // Вкладки (iPhone-friendly)
     const tabButtons = document.querySelectorAll(".tab-btn");
     const tabContents = {
         stats: document.getElementById("tab-stats"),
@@ -432,72 +385,71 @@
         story: document.getElementById("tab-story")
     };
 
-    tabButtons.forEach(btn => {
-        btn.addEventListener("click", () => {
-            const tab = btn.getAttribute("data-tab");
-            tabButtons.forEach(b => b.classList.remove("active"));
-            btn.classList.add("active");
-            Object.keys(tabContents).forEach(key => {
-                tabContents[key].classList.toggle("active", key === tab);
-            });
+    function switchTab(e) {
+        e.preventDefault();
+        const tab = this.getAttribute("data-tab");
+        tabButtons.forEach(b => b.classList.remove("active"));
+        this.classList.add("active");
+        Object.keys(tabContents).forEach(key => {
+            tabContents[key].classList.toggle("active", key === tab);
         });
+    }
+
+    tabButtons.forEach(btn => {
+        btn.setAttribute("type", "button");
+        btn.addEventListener("touchstart", switchTab, { passive: false });
+        btn.addEventListener("click", switchTab);
     });
 
     // Фото
     function updatePhoto() {
         const url = document.getElementById('photoURL').value.trim();
-        if (url.length > 5) {
-            document.getElementById('charPhoto').src = url;
-        }
+        if (url.length > 5) document.getElementById('charPhoto').src = url;
     }
 
     // HP
-    let hpCurrent = 32;
-    const hpMax = 32;
+    let hpCurrent = 21, hpMax = 21;
     function updateHP() {
         document.getElementById('hpCounter').textContent = hpCurrent + " / " + hpMax;
         document.getElementById('hpBar').style.width = (hpCurrent / hpMax * 100) + "%";
     }
-    function changeHP(delta) {
-        hpCurrent = Math.max(0, Math.min(hpMax, hpCurrent + delta));
+    function changeHP(d) {
+        hpCurrent = Math.max(0, Math.min(hpMax, hpCurrent + d));
         updateHP();
     }
     updateHP();
 
-    // MP
-    let mpCurrent = 18;
-    const mpMax = 18;
+    // Вдохновение
+    let mpCurrent = 4, mpMax = 4;
     function updateMP() {
         document.getElementById('mpCounter').textContent = mpCurrent + " / " + mpMax;
         document.getElementById('mpBar').style.width = (mpCurrent / mpMax * 100) + "%";
     }
-    function changeMP(delta) {
-        mpCurrent = Math.max(0, Math.min(mpMax, mpCurrent + delta));
+    function changeMP(d) {
+        mpCurrent = Math.max(0, Math.min(mpMax, mpCurrent + d));
         updateMP();
     }
     updateMP();
 
-    // Способности с коллдаунами
+    // Способности
     const abilities = {
-        1: { cost: 2, cd: 2, timer: 0 },
-        2: { cost: 1, cd: 1, timer: 0 },
-        3: { cost: 2, cd: 2, timer: 0 },
-        4: { cost: 3, cd: 3, timer: 0 }
+        1: { cost: 1, cd: 1, timer: 0 },
+        2: { cost: 2, cd: 2, timer: 0 },
+        3: { cost: 1, cd: 1, timer: 0 },
+        4: { cost: 2, cd: 3, timer: 0 }
     };
 
     function useAbility(id) {
         const ab = abilities[id];
         if (ab.timer > 0) return;
         if (mpCurrent < ab.cost) return;
-
         mpCurrent -= ab.cost;
         updateMP();
-
         ab.timer = ab.cd;
         const btn = document.getElementById('btn' + id);
         const cdLabel = document.getElementById('cd' + id);
         btn.disabled = true;
-        cdLabel.textContent = "Коллдаун: " + ab.timer + " раунд(ов)";
+        cdLabel.textContent = "КД: " + ab.timer + " раунд(ов)";
     }
 
     function nextRound() {
@@ -513,7 +465,7 @@
                     btn.disabled = false;
                     cdLabel.textContent = "Готово";
                 } else {
-                    cdLabel.textContent = "Коллдаун: " + ab.timer + " раунд(ов)";
+                    cdLabel.textContent = "КД: " + ab.timer + " раунд(ов)";
                 }
             }
         });
@@ -524,6 +476,5 @@
         el.classList.toggle("active");
     }
 </script>
-
 </body>
 </html>
