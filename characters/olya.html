@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Оника Плавная — Лист персонажа</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    body {
+        font-family: system-ui, -apple-system, sans-serif;
+        background: #03161c;
+        color: #e5e7eb;
+        margin: 0;
+        padding: 10px;
+    }
+    .sheet {
+        max-width: 800px;
+        margin: 0 auto;
+        background: #072029;
+        border-radius: 12px;
+        padding: 12px;
+        border: 1px solid #0e7490;
+    }
+    h1 { margin: 0 0 4px 0; }
+    .subtitle { font-size: 0.9em; color: #a5f3fc; margin-bottom: 8px; }
+
+    .tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        margin-bottom: 8px;
+    }
+    .tab-btn {
+        flex: 1 1 90px;
+        background: #0c4a5e;
+        border: 1px solid #22d3ee;
+        color: #cffafe;
+        padding: 4px 6px;
+        border-radius: 999px;
+        cursor: pointer;
+        font-size: 0.85em;
+        text-align: center;
+    }
+    .tab-btn.active {
+        background: #22d3ee;
+        color: #052e36;
+    }
+    .tab-content { display: none; margin-top: 8px; }
+    .tab-content.active { display: block; }
+
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .card {
+        flex: 1 1 240px;
+        background: #031218;
+        border-radius: 8px;
+        padding: 8px;
+        border: 1px solid #0e7490;
+    }
+
+    .photo-block img {
+        width: 100%;
+        height: auto;
+        max-height: 220px;
+        object-fit: cover;
+        border-radius: 6px;
+        border: 1px solid #22d3ee;
+    }
+    .photo-input {
+        width: 100%;
+        background: #031218;
+        border: 1px solid #334155;
+        border-radius: 4px;
+        padding: 4px;
+        color: #e5e7eb;
+        margin-top: 6px;
+        font-size: 0.8em;
+    }
+
+    .stat-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.9em;
+    }
+    .counter { font-size: 1.1em; font-weight: bold; }
+
+    button {
+        background: #22d3ee;
+        border: none;
+        color: #052e36;
+        padding: 3px 6px;
+        margin: 0 2px 2px 0;
+        border-radius: 999px;
+        cursor: pointer;
+        font-size: 0.8em;
+    }
+    button:disabled {
+        background: #4b5563;
+        color: #9ca3af;
+        cursor: default;
+    }
+
+    .bar {
+        position: relative;
+        height: 12px;
+        background: #031218;
+        border-radius: 999px;
+        overflow: hidden;
+        margin-top: 4px;
+        border: 1px solid #0e7490;
+    }
+    .bar-fill { height: 100%; width: 100%; }
+    .hp { background: linear-gradient(90deg, #ef4444, #b91c1c); }
+    .mp { background: linear-gradient(90deg, #22d3ee, #0e7490); }
+
+    .ability {
+        background: #041a22;
+        padding: 6px;
+        border-radius: 6px;
+        margin-bottom: 6px;
+        border: 1px solid #0e7490;
+        font-size: 0.85em;
+    }
+    .ability-title {
+        font-weight: bold;
+        color: #67e8f9;
+        margin-bottom: 4px;
+    }
+    .cooldown {
+        font-size: 0.75em;
+        color: #a5f3fc;
+        margin-top: 2px;
+    }
+
+    .buff {
+        background: #041a22;
+        padding: 6px;
+        border-radius: 6px;
+        margin-bottom: 4px;
+        cursor: pointer;
+        border: 1px solid #0e7490;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.85em;
+    }
+    .buff-name { font-weight: bold; color: #cffafe; }
+    .buff.active {
+        background: #0c4a5e;
+        border-color: #22d3ee;
+    }
+
+    .quick-stats {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        margin-top: 6px;
+    }
+    .quick-stat {
+        flex: 1 1 28%;
+        background: #0a3340;
+        border: 1px solid #0e7490;
+        border-radius: 6px;
+        padding: 3px 4px;
+        text-align: center;
+        font-size: 0.75em;
+    }
+    .quick-stat .qs-name {
+        color: #a5f3fc;
+        display: block;
+        font-size: 0.85em;
+    }
+    .quick-stat .qs-val {
+        font-weight: bold;
+        font-size: 1.15em;
+        color: #67e8f9;
+    }
+
+    textarea {
+        width: 100%;
+        background: #031218;
+        border: 1px solid #334155;
+        border-radius: 6px;
+        color: #e5e7eb;
+        padding: 6px;
+        resize: vertical;
+        min-height: 70px;
+        font-size: 0.85em;
+    }
+
+    @media (max-width: 600px) {
+        .card { flex: 1 1 100%; }
+        .tab-btn { flex: 1 1 45%; }
+        .quick-stat { flex: 1 1 30%; }
+    }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+    <h1>Оника Плавная</h1>
+    <div class="subtitle">Водный генази-монах. Снаружи — гладь. Внутри — течение. Рядом с ней почему-то всем легко.</div>
+
+    <div class="tabs">
+        <button type="button" class="tab-btn active" data-tab="stats">⚔️ Статы</button>
+        <button type="button" class="tab-btn" data-tab="inventory">🎒 Инвентарь</button>
+        <button type="button" class="tab-btn" data-tab="abilities">💥 Способности</button>
+        <button type="button" class="tab-btn" data-tab="buffs">✨ Баффы</button>
+        <button type="button" class="tab-btn" data-tab="story">📖 История</button>
+    </div>
+
+    <!-- СТАТЫ -->
+    <div id="tab-stats" class="tab-content active">
+        <div class="row">
+            <div class="card photo-block">
+                <h2>Фото</h2>
+                <img id="charPhoto" src="https://picsum.photos/seed/onika/600/400" alt="Оника">
+                <input class="photo-input" id="photoURL" placeholder="URL изображения" oninput="updatePhoto()">
+            </div>
+
+            <div class="card">
+                <div class="stat-header">
+                    <h2>HP</h2>
+                    <div class="counter" id="hpCounter">24 / 24</div>
+                </div>
+                <div class="bar"><div class="bar-fill hp" id="hpBar"></div></div>
+                <button onclick="changeHP(-5)">-5</button>
+                <button onclick="changeHP(-1)">-1</button>
+                <button onclick="changeHP(1)">+1</button>
+                <button onclick="changeHP(5)">+5</button>
+            </div>
+
+            <div class="card">
+                <div class="stat-header">
+                    <h2>Ци</h2>
+                    <div class="counter" id="mpCounter">3 / 3</div>
+                </div>
+                <div class="bar"><div class="bar-fill mp" id="mpBar"></div></div>
+                <button onclick="changeMP(-3)">-3</button>
+                <button onclick="changeMP(-1)">-1</button>
+                <button onclick="changeMP(1)">+1</button>
+                <button onclick="changeMP(3)">+3</button>
+            </div>
+
+            <div class="card">
+                <h2>Данные</h2>
+                <ul style="padding-left:18px;font-size:0.85em;margin:4px 0;">
+                    <li><strong>Раса:</strong> Водный генази</li>
+                    <li><strong>Класс:</strong> Монах (Путь Милосердия)</li>
+                    <li><strong>Уровень:</strong> 3</li>
+                    <li><strong>Происхождение:</strong> Озеро Тихий Плёс</li>
+                </ul>
+
+                <h3 style="margin:8px 0 4px 0;font-size:0.9em;color:#a5f3fc;">Характеристики</h3>
+                <div class="quick-stats">
+                    <div class="quick-stat">
+                        <span class="qs-name">💪 Сила</span>
+                        <span class="qs-val">10 (+0)</span>
+                    </div>
+                    <div class="quick-stat">
+                        <span class="qs-name">🤸 Ловк</span>
+                        <span class="qs-val">17 (+3)</span>
+                    </div>
+                    <div class="quick-stat">
+                        <span class="qs-name">🛡 Тел</span>
+                        <span class="qs-val">14 (+2)</span>
+                    </div>
+                    <div class="quick-stat">
+                        <span class="qs-name">📚 Инт</span>
+                        <span class="qs-val">11 (+0)</span>
+                    </div>
+                    <div class="quick-stat">
+                        <span class="qs-name">👀 Мдр</span>
+                        <span class="qs-val">16 (+3)</span>
+                    </div>
+                    <div class="quick-stat">
+                        <span class="qs-name">😎 Хар</span>
+                        <span class="qs-val">13 (+1)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Характеристики (подробно)</h3>
+            <ul>
+                <li><strong>💪 Сила:</strong> 10 (+0) — «Зачем напрягаться? Вода не борется.»</li>
+                <li><strong>🤸 Ловкость:</strong> 17 (+3) — тело слушается, как вода в русле</li>
+                <li><strong>🛡 Телосложение:</strong> 14 (+2)</li>
+                <li><strong>📚 Интеллект:</strong> 11 (+0) — соображает, но не спешит с выводами</li>
+                <li><strong>👀 Мудрость:</strong> 16 (+3) — чувствует настроение людей без слов</li>
+                <li><strong>😎 Харизма:</strong> 13 (+1) — с ней легко, и никто не может объяснить почему</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h3>Боевые показатели</h3>
+            <ul>
+                <li><strong>🛡 Броня:</strong> 16 (без доспехов, Ловкость + Мудрость)</li>
+                <li><strong>⚡ Инициатива:</strong> +3</li>
+                <li><strong>🏃 Скорость:</strong> 12 м (плавная, как течение)</li>
+                <li><strong>🎯 Бонус мастерства:</strong> +2</li>
+                <li><strong>👁 Пассивная внимательность:</strong> 16</li>
+            </ul>
+        </div>
+
+        <div class="row">
+            <div class="card" style="flex:100%">
+                <h2>Заметки</h2>
+                <textarea id="notes"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <!-- ИНВЕНТАРЬ -->
+    <div id="tab-inventory" class="tab-content">
+        <div class="row">
+            <div class="card" style="flex:100%">
+                <h2>Инвентарь</h2>
+                <ul style="padding-left:18px;font-size:0.85em;">
+                    <li><strong>Коврик «Дом»</strong> — свёрнут в рулон, всегда с собой. «Дом там, где коврик.»</li>
+                    <li><strong>Фляга с водой</strong> — не простая. Внутри — вода из родного озера. Иногда сама собой успокаивается, если взболтать.</li>
+                    <li><strong>Чётки из речного камня</strong> — 54 бусины. Перебирает их, когда думает.</li>
+                    <li><strong>Травяной чай (запас)</strong> — три вида. Мятный, ромашковый и «тот самый». Угощает всех без вопросов.</li>
+                    <li><strong>Полотенце</strong> — «Самая нужная вещь в путешествии. Серьёзно.»</li>
+                    <li><strong>Дневник практики</strong> — записи о позах, дыхании и людях, которых встретила. Много смешных историй.</li>
+                    <li><strong>Маленькая свеча</strong> — для вечерней медитации. Горит ровно, без дыма.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- СПОСОБНОСТИ -->
+    <div id="tab-abilities" class="tab-content">
+        <div class="row">
+            <div class="card" style="flex:100%">
+                <h2>Способности</h2>
+
+                <div class="ability" id="ab1">
+                    <div class="ability-title">Поза Дерева</div>
+                    <p>Оника замирает на одной ноге. До конца следующего хода она получает +2 к броне и не может быть сдвинута с места. Враги бьют по ней — а она стоит. «Корни глубоко.»</p>
+                    <p><strong>Стоимость:</strong> 1 ци, <strong>КД:</strong> 1 раунд</p>
+                    <button id="btn1" onclick="useAbility(1)">Использовать</button>
+                    <div class="cooldown" id="cd1"></div>
+                </div>
+
+                <div class="ability" id="ab2">
+                    <div class="ability-title">Поток</div>
+                    <p>Оника двигается как вода — плавно, без рывков. Она перемещается на свою скорость, не вызывая атак по пути, и может перенаправить одну атаку по себе на другого врага рядом. «Вода не спорит. Вода обтекает.»</p>
+                    <p><strong>Стоимость:</strong> 1 ци, <strong>КД:</strong> 1 раунд</p>
+                    <button id="btn2" onclick="useAbility(2)">Использовать</button>
+                    <div class="cooldown" id="cd2"></div>
+                </div>
+
+                <div class="ability" id="ab3">
+                    <div class="ability-title">Дыхание Огня</div>
+                    <p>Оника делает глубокий вдох и выдыхает — но не огонь, а плотную струю воды с силой. 2d6 дробящего урона в конусе 4,5 м. «Это называется капалабхати. Только чуть сильнее.»</p>
+                    <p><strong>Стоимость:</strong> 2 ци, <strong>КД:</strong> 2 раунда</p>
+                    <button id="btn3" onclick="useAbility(3)">Использовать</button>
+                    <div class="cooldown" id="cd3"></div>
+                </div>
+
+                <div class="ability" id="ab4">
+                    <div class="ability-title">Шавасана</div>
+                    <p>Оника ложится на землю и закрывает глаза. Все союзники в радиусе 3 м восстанавливают 1d8 HP. Оника пропускает свой следующий ход — она отдыхает. «Иногда лучший ход — просто полежать.»</p>
+                    <p><strong>Стоимость:</strong> 2 ци, <strong>КД:</strong> 3 раунда</p>
+                    <button id="btn4" onclick="useAbility(4)">Использовать</button>
+                    <div class="cooldown" id="cd4"></div>
+                </div>
+
+                <button style="margin-top:6px;width:100%" onclick="nextRound()">Раунд +1 (уменьшить КД)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- БАФФЫ -->
+    <div id="tab-buffs" class="tab-content">
+        <div class="row">
+            <div class="card" style="flex:100%">
+                <h2>Баффы</h2>
+                <div class="buff" onclick="toggleBuff(this)">
+                    <div><span class="buff-name">Дыхание Ровное</span> — +1 к спасброскам от испуга. Дышит, и всё проходит.</div>
+                </div>
+                <div class="buff" onclick="toggleBuff(this)">
+                    <div><span class="buff-name">Гибкость</span> — +1 к акробатике. Тело слушается без усилий.</div>
+                </div>
+                <div class="buff" onclick="toggleBuff(this)">
+                    <div><span class="buff-name">Рядом Спокойно</span> — союзники рядом чувствуют себя лучше. Просто потому что она есть.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ИСТОРИЯ -->
+    <div id="tab-story" class="tab-content">
+        <div class="row">
+            <div class="card" style="flex:100%">
+                <h2>История</h2>
+                <p style="font-size:0.85em;">
+                    Оника родилась на берегу озера Тихий Плёс, в семье водных генази.
+                    Её род всегда жил у воды: они не строили домов, они строили
+                    навесы, чтобы слышать, как плещется вода. Мать Оники была
+                    целительницей, отец — рыбаком. Детство было тихим, тёплым
+                    и очень мокрым.
+                </p>
+                <p style="font-size:0.85em;">
+                    В детстве Оника почти не разговаривала с незнакомыми. Не потому
+                    что стеснялась — просто не видела смысла. Она сидела у воды,
+                    смотрела на рябь и слушала. Когда кто-то пытался с ней
+                    заговорить, она вежливо кивала и возвращалась к своему занятию.
+                    Свои знали: если Оника молчит — она не грубит, она наблюдает.
+                </p>
+                <p style="font-size:0.85em;">
+                    Однажды в их деревню пришёл странствующий монах — старик
+                    с ковриком и лёгкой улыбкой. Он раскладывал коврик у воды
+                    и делал что-то странное: стоял на одной ноге, складывался
+                    пополам, дышал так, что живот ходил волнами. Оника подошла,
+                    села рядом и стала смотреть. Монах ничего не сказал.
+                    На следующий день она пришла снова. На третий —
+                    он просто подвинулся и освободил ей место на коврике.
+                </p>
+                <p style="font-size:0.85em;">
+                    Так Оника научилась йоге. Она не знала, что это так называется —
+                    просто делала. И замечала, что после каждого занятия она
+                    чувствует себя... ровнее. Внутри становится тихо, а снаружи —
+                    наоборот, легче. Через год монах ушёл. На прощание сказал
+                    только: «Ты уже умеешь. Просто продолжай.» Она продолжала.
+                </p>
+                <p style="font-size:0.85em;">
+                    Позже она поняла, что может не только успокаивать себя —
+                    но и других. Люди рядом с ней переставали нервничать. Раны
+                    заживали быстрее. Ссоры утихали. Она не делала ничего
+                    специального — просто была. И этого хватало.
+                </p>
+                <p style="font-size:0.85em;">
+                    В какой-то момент она поняла: если рядом с ней людям становится
+                    легче, значит, ей стоит быть рядом с людьми. Она собрала
+                    коврик, флягу и чётки — и пошла. Сначала в ближайший город,
+                    потом дальше. Учила всех, кто хотел. Угощала чаем тех,
+                    кто не хотел. И никого не заставляла.
+                </p>
+                <p style="font-size:0.85em;">
+                    Теперь она с отрядом. Когда все устали — она предлагает
+                    передохнуть. Когда кто-то злится — она просто садится рядом
+                    и молчит. Когда всем весело — она смеётся громче всех и
+                    рассказывает истории, от которых животы болят. А утром
+                    первая встаёт, сворачивает коврик и говорит: «Ну что,
+                    пошли?» Её любимая фраза: «Всё уже хорошо. Просто
+                    дыши.»
+                </p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Вкладки (iPhone-friendly)
+    const tabButtons = document.querySelectorAll(".tab-btn");
+    const tabContents = {
+        stats: document.getElementById("tab-stats"),
+        inventory: document.getElementById("tab-inventory"),
+        abilities: document.getElementById("tab-abilities"),
+        buffs: document.getElementById("tab-buffs"),
+        story: document.getElementById("tab-story")
+    };
+
+    function switchTab(e) {
+        e.preventDefault();
+        const tab = this.getAttribute("data-tab");
+        tabButtons.forEach(b => b.classList.remove("active"));
+        this.classList.add("active");
+        Object.keys(tabContents).forEach(key => {
+            tabContents[key].classList.toggle("active", key === tab);
+        });
+    }
+
+    tabButtons.forEach(btn => {
+        btn.setAttribute("type", "button");
+        btn.addEventListener("touchstart", switchTab, { passive: false });
+        btn.addEventListener("click", switchTab);
+    });
+
+    // Фото
+    function updatePhoto() {
+        const url = document.getElementById('photoURL').value.trim();
+        if (url.length > 5) document.getElementById('charPhoto').src = url;
+    }
+
+    // HP
+    let hpCurrent = 24, hpMax = 24;
+    function updateHP() {
+        document.getElementById('hpCounter').textContent = hpCurrent + " / " + hpMax;
+        document.getElementById('hpBar').style.width = (hpCurrent / hpMax * 100) + "%";
+    }
+    function changeHP(d) {
+        hpCurrent = Math.max(0, Math.min(hpMax, hpCurrent + d));
+        updateHP();
+    }
+    updateHP();
+
+    // Ци
+    let mpCurrent = 3, mpMax = 3;
+    function updateMP() {
+        document.getElementById('mpCounter').textContent = mpCurrent + " / " + mpMax;
+        document.getElementById('mpBar').style.width = (mpCurrent / mpMax * 100) + "%";
+    }
+    function changeMP(d) {
+        mpCurrent = Math.max(0, Math.min(mpMax, mpCurrent + d));
+        updateMP();
+    }
+    updateMP();
+
+    // Способности
+    const abilities = {
+        1: { cost: 1, cd: 1, timer: 0 },
+        2: { cost: 1, cd: 1, timer: 0 },
+        3: { cost: 2, cd: 2, timer: 0 },
+        4: { cost: 2, cd: 3, timer: 0 }
+    };
+
+    function useAbility(id) {
+        const ab = abilities[id];
+        if (ab.timer > 0) return;
+        if (mpCurrent < ab.cost) return;
+        mpCurrent -= ab.cost;
+        updateMP();
+        ab.timer = ab.cd;
+        const btn = document.getElementById('btn' + id);
+        const cdLabel = document.getElementById('cd' + id);
+        btn.disabled = true;
+        cdLabel.textContent = "КД: " + ab.timer + " раунд(ов)";
+    }
+
+    function nextRound() {
+        Object.keys(abilities).forEach(key => {
+            const id = parseInt(key);
+            const ab = abilities[id];
+            if (ab.timer > 0) {
+                ab.timer -= 1;
+                const btn = document.getElementById('btn' + id);
+                const cdLabel = document.getElementById('cd' + id);
+                if (ab.timer <= 0) {
+                    ab.timer = 0;
+                    btn.disabled = false;
+                    cdLabel.textContent = "Готово";
+                } else {
+                    cdLabel.textContent = "КД: " + ab.timer + " раунд(ов)";
+                }
+            }
+        });
+    }
+
+    // Баффы
+    function toggleBuff(el) {
+        el.classList.toggle("active");
+    }
+</script>
+</body>
+</html>
