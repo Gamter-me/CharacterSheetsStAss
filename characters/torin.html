@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Найра Невозмутимая — Лист персонажа</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    body {
+        font-family: system-ui, -apple-system, sans-serif;
+        background: #0a0512;
+        color: #e5e7eb;
+        margin: 0;
+        padding: 10px;
+    }
+    .sheet {
+        max-width: 800px;
+        margin: 0 auto;
+        background: #160b26;
+        border-radius: 12px;
+        padding: 12px;
+        border: 1px solid #4c1d95;
+    }
+    h1 { margin: 0 0 4px 0; }
+    .subtitle { font-size: 0.9em; color: #c4b5fd; margin-bottom: 8px; }
+
+    .tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        margin-bottom: 8px;
+    }
+    .tab-btn {
+        flex: 1 1 90px;
+        background: #4c1d95;
+        border: 1px solid #a855f7;
+        color: #ede9fe;
+        padding: 4px 6px;
+        border-radius: 999px;
+        cursor: pointer;
+        font-size: 0.85em;
+        text-align: center;
+    }
+    .tab-btn.active {
+        background: #a855f7;
+        color: #1e0b2e;
+    }
+    .tab-content { display: none; margin-top: 8px; }
+    .tab-content.active { display: block; }
+
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .card {
+        flex: 1 1 240px;
+        background: #0c0518;
+        border-radius: 8px;
+        padding: 8px;
+        border: 1px solid #4c1d95;
+    }
+
+    .photo-block img {
+        width: 100%;
+        height: auto;
+        max-height: 220px;
+        object-fit: cover;
+        border-radius: 6px;
+        border: 1px solid #a855f7;
+    }
+    .photo-input {
+        width: 100%;
+        background: #0c0518;
+        border: 1px solid #334155;
+        border-radius: 4px;
+        padding: 4px;
+        color: #e5e7eb;
+        margin-top: 6px;
+        font-size: 0.8em;
+    }
+
+    .stat-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.9em;
+    }
+    .counter { font-size: 1.1em; font-weight: bold; }
+
+    button {
+        background: #a855f7;
+        border: none;
+        color: #1e0b2e;
+        padding: 3px 6px;
+        margin: 0 2px 2px 0;
+        border-radius: 999px;
+        cursor: pointer;
+        font-size: 0.8em;
+    }
+    button:disabled {
+        background: #4b5563;
+        color: #9ca3af;
+        cursor: default;
+    }
+
+    .bar {
+        position: relative;
+        height: 12px;
+        background: #0c0518;
+        border-radius: 999px;
+        overflow: hidden;
+        margin-top: 4px;
+        border: 1px solid #4c1d95;
+    }
+    .bar-fill { height: 100%; width: 100%; }
+    .hp { background: linear-gradient(90deg, #ef4444, #b91c1c); }
+    .mp { background: linear-gradient(90deg, #ec4899, #a855f7); }
+
+    .ability {
+        background: #100720;
+        padding: 6px;
+        border-radius: 6px;
+        margin-bottom: 6px;
+        border: 1px solid #4c1d95;
+        font-size: 0.85em;
+    }
+    .ability-title {
+        font-weight: bold;
+        color: #f0abfc;
+        margin-bottom: 4px;
+    }
+    .cooldown {
+        font-size: 0.75em;
+        color: #c4b5fd;
+        margin-top: 2px;
+    }
+
+    .buff {
+        background: #100720;
+        padding: 6px;
+        border-radius: 6px;
+        margin-bottom: 4px;
+        cursor: pointer;
+        border: 1px solid #4c1d95;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.85em;
+    }
+    .buff-name { font-weight: bold; color: #ddd6fe; }
+    .buff.active {
+        background: #4c1d95;
+        border-color: #a855f7;
+    }
+
+    .quick-stats {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        margin-top: 6px;
+    }
+    .quick-stat {
+        flex: 1 1 28%;
+        background: #1e0b2e;
+        border: 1px solid #7c3aed;
+        border-radius: 6px;
+        padding: 3px 4px;
+        text-align: center;
+        font-size: 0.75em;
+    }
+    .quick-stat .qs-name {
+        color: #c4b5fd;
+        display: block;
+        font-size: 0.85em;
+    }
+    .quick-stat .qs-val {
+        font-weight: bold;
+        font-size: 1.15em;
+        color: #f0abfc;
+    }
+
+    textarea {
+        width: 100%;
+        background: #0c0518;
+        border: 1px solid #334155;
+        border-radius: 6px;
+        color: #e5e7eb;
+        padding: 6px;
+        resize: vertical;
+        min-height: 70px;
+        font-size: 0.85em;
+    }
+
+    @media (max-width: 600px) {
+        .card { flex: 1 1 100%; }
+        .tab-btn { flex: 1 1 45%; }
+        .quick-stat { flex: 1 1 30%; }
+    }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+    <h1>Найра Невозмутимая</h1>
+    <div class="subtitle">Тифлинг-монах. Её невозможно вывести из себя — но иногда она сама роняет фразу, от которой все падают.</div>
+
+    <div class="tabs">
+        <button type="button" class="tab-btn active" data-tab="stats">⚔️ Статы</button>
+        <button type="button" class="tab-btn" data-tab="inventory">🎒 Инвентарь</button>
+        <button type="button" class="tab-btn" data-tab="abilities">💥 Способности</button>
+        <button type="button" class="tab-btn" data-tab="buffs">✨ Баффы</button>
+        <button type="button" class="tab-btn" data-tab="story">📖 История</button>
+    </div>
+
+    <!-- СТАТЫ -->
+    <div id="tab-stats" class="tab-content active">
+        <div class="row">
+            <div class="card photo-block">
+                <h2>Фото</h2>
+                <img id="charPhoto" src="https://picsum.photos/seed/naira2/600/400" alt="Найра">
+                <input class="photo-input" id="photoURL" placeholder="URL изображения" oninput="updatePhoto()">
+            </div>
+
+            <div class="card">
+                <div class="stat-header">
+                    <h2>HP</h2>
+                    <div class="counter" id="hpCounter">24 / 24</div>
+                </div>
+                <div class="bar"><div class="bar-fill hp" id="hpBar"></div></div>
+                <button onclick="changeHP(-5)">-5</button>
+                <button onclick="changeHP(-1)">-1</button>
+                <button onclick="changeHP(1)">+1</button>
+                <button onclick="changeHP(5)">+5</button>
+            </div>
+
+            <div class="card">
+                <div class="stat-header">
+                    <h2>Ци</h2>
+                    <div class="counter" id="mpCounter">3 / 3</div>
+                </div>
+                <div class="bar"><div class="bar-fill mp" id="mpBar"></div></div>
+                <button onclick="changeMP(-3)">-3</button>
+                <button onclick="changeMP(-1)">-1</button>
+                <button onclick="changeMP(1)">+1</button>
+                <button onclick="changeMP(3)">+3</button>
+            </div>
+
+            <div class="card">
+                <h2>Данные</h2>
+                <ul style="padding-left:18px;font-size:0.85em;margin:4px 0;">
+                    <li><strong>Раса:</strong> Тифлинг</li>
+                    <li><strong>Класс:</strong> Монах (Путь Тени)</li>
+                    <li><strong>Уровень:</strong> 3</li>
+                    <li><strong>Происхождение:</strong> Монастырь Серебряной Луны</li>
+                </ul>
+
+                <h3 style="margin:8px 0 4px 0;font-size:0.9em;color:#c4b5fd;">Характеристики</h3>
+                <div class="quick-stats">
+                    <div class="quick-stat">
+                        <span class="qs-name">💪 Сила</span>
+                        <span class="qs-val">12 (+1)</span>
+                    </div>
+                    <div class="quick-stat">
+                        <span class="qs-name">🤸 Ловк</span>
+                        <span class="qs-val">17 (+3)</span>
+                    </div>
+                    <div class="quick-stat">
+                        <span class="qs-name">🛡 Тел</span>
+                        <span class="qs-val">14 (+2)</span>
+                    </div>
+                    <div class="quick-stat">
+                        <span class="qs-name">📚 Инт</span>
+                        <span class="qs-val">11 (+0)</span>
+                    </div>
+                    <div class="quick-stat">
+                        <span class="qs-name">👀 Мдр</span>
+                        <span class="qs-val">16 (+3)</span>
+                    </div>
+                    <div class="quick-stat">
+                        <span class="qs-name">😎 Хар</span>
+                        <span class="qs-val">10 (+0)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Характеристики (подробно)</h3>
+            <ul>
+                <li><strong>💪 Сила:</strong> 12 (+1) — «Я не слабая, я просто не напрягаюсь»</li>
+                <li><strong>🤸 Ловкость:</strong> 17 (+3)</li>
+                <li><strong>🛡 Телосложение:</strong> 14 (+2)</li>
+                <li><strong>📚 Интеллект:</strong> 11 (+0)</li>
+                <li><strong>👀 Мудрость:</strong> 16 (+3)</li>
+                <li><strong>😎 Харизма:</strong> 10 (+0) — говорит редко, но в точку</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h3>Боевые показатели</h3>
+            <ul>
+                <li><strong>🛡 Броня:</strong> 16 (без доспехов, Мудрость + Ловкость)</li>
+                <li><strong>⚡ Инициатива:</strong> +3</li>
+                <li><strong>🏃 Скорость:</strong> 12 м (монашеская поступь)</li>
+                <li><strong>🎯 Бонус мастерства:</strong> +2</li>
+                <li><strong>👁 Пассивная внимательность:</strong> 16</li>
+            </ul>
+        </div>
+
+        <div class="row">
+            <div class="card" style="flex:100%">
+                <h2>Заметки</h2>
+                <textarea id="notes"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <!-- ИНВЕНТАРЬ -->
+    <div id="tab-inventory" class="tab-content">
+        <div class="row">
+            <div class="card" style="flex:100%">
+                <h2>Инвентарь</h2>
+                <ul style="padding-left:18px;font-size:0.85em;">
+                    <li><strong>Боевой посох «Шёпот»</strong> — 1d6 дробящий. Лёгкий, как мысль.</li>
+                    <li><strong>Дартсы (10 штук)</strong> — 1d4 колющий. Метко кидает, редко промахивается.</li>
+                    <li><strong>Монашеская роба</strong> — тёмно-фиолетовая. Скрывает хвост. Иногда.</li>
+                    <li><strong>Свёрток с травами</strong> — для медитации. Пахнет лавандой и спокойствием.</li>
+                    <li><strong>Чётки из обсидиана</strong> — 108 бусин. Найра перебирает их, когда думает.</li>
+                    <li><strong>Маленький дневник</strong> — исписан аккуратным почерком. Никто не видел содержимое.</li>
+                    <li><strong>Печенье «Для друзей»</strong> — печёт сама. Всегда с собой. Угощает молча.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- СПОСОБНОСТИ -->
+    <div id="tab-abilities" class="tab-content">
+        <div class="row">
+            <div class="card" style="flex:100%">
+                <h2>Способности</h2>
+
+                <div class="ability" id="ab1">
+                    <div class="ability-title">Вспышка Тени</div>
+                    <p>2d6 + Ловкость урона некротической энергией. Из-под ног врага вырывается тень. Найра при этом даже не меняется в лице.</p>
+                    <p><strong>Стоимость:</strong> 1 ци, <strong>КД:</strong> 1 раунд</p>
+                    <button id="btn1" onclick="useAbility(1)">Использовать</button>
+                    <div class="cooldown" id="cd1"></div>
+                </div>
+
+                <div class="ability" id="ab2">
+                    <div class="ability-title">Шаг Сквозь Мрак</div>
+                    <p>Найра исчезает в одной тени и появляется в другой в пределах 18 м. Все, кто её искал, чувствуют лёгкое разочарование.</p>
+                    <p><strong>Стоимость:</strong> 2 ци, <strong>КД:</strong> 2 раунда</p>
+                    <button id="btn2" onclick="useAbility(2)">Использовать</button>
+                    <div class="cooldown" id="cd2"></div>
+                </div>
+
+                <div class="ability" id="ab3">
+                    <div class="ability-title">Удар Покоя</div>
+                    <p>1d8 + Ловкость урона. Враг делает спасбросок Телосложения или оглушён до конца следующего хода. Найра просто кладёт ладонь ему на плечо — и всё.</p>
+                    <p><strong>Стоимость:</strong> 1 ци, <strong>КД:</strong> 1 раунд</p>
+                    <button id="btn3" onclick="useAbility(3)">Использовать</button>
+                    <div class="cooldown" id="cd3"></div>
+                </div>
+
+                <div class="ability" id="ab4">
+                    <div class="ability-title">Неожиданное Остроумие</div>
+                    <p>Найра говорит одну фразу. Враги делают спасбросок Мудрости или получают 2d6 психического урона и помеху на атаку. Союзники получают +1 к следующему броску от смеха.</p>
+                    <p><strong>Стоимость:</strong> 2 ци, <strong>КД:</strong> 3 раунда</p>
+                    <button id="btn4" onclick="useAbility(4)">Использовать</button>
+                    <div class="cooldown" id="cd4"></div>
+                </div>
+
+                <button style="margin-top:6px;width:100%" onclick="nextRound()">Раунд +1 (уменьшить КД)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- БАФФЫ -->
+    <div id="tab-buffs" class="tab-content">
+        <div class="row">
+            <div class="card" style="flex:100%">
+                <h2>Баффы</h2>
+                <div class="buff" onclick="toggleBuff(this)">
+                    <div><span class="buff-name">Невозмутимость</span> — +1 к спасброскам от страха и очарования.</div>
+                </div>
+                <div class="buff" onclick="toggleBuff(this)">
+                    <div><span class="buff-name">Внутренний Покой</span> — +1 к Мудрости. Спокойна как удав.</div>
+                </div>
+                <div class="buff" onclick="toggleBuff(this)">
+                    <div><span class="buff-name">Печенье для друзей</span> — +1 к отношениям в отряде. Работает безотказно.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ИСТОРИЯ -->
+    <div id="tab-story" class="tab-content">
+        <div class="row">
+            <div class="card" style="flex:100%">
+                <h2>История</h2>
+                <p style="font-size:0.85em;">
+                    Найра родилась в небольшом городке, где тифлингов не очень любили. Её мать была
+                    травницей, отец — кузнецом, и оба старались жить спокойно. Найра с детства
+                    усвоила: не важно, что о тебе говорят, важно, что ты делаешь. Её невозможно
+                    было вывести из себя — ни криками, ни насмешками, ни косыми взглядами.
+                </p>
+                <p style="font-size:0.85em;">
+                    В семь лет она случайно забрела в Монастырь Серебряной Луны — место, где монахи
+                    учились держать равновесие между телом и духом. Найра провела там три дня,
+                    и никто её не прогнал. Настоятельница сказала: «Ты уже умеешь главное —
+                    не терять себя. Остальному научим». Так она осталась.
+                </p>
+                <p style="font-size:0.85em;">
+                    Годы тренировок сделали её одной из лучших учениц. Она двигалась бесшумно, говорила
+                    редко, но каждое её слово попадало в цель. Монахи называли её «Невозмутимой» —
+                    потому что даже когда вокруг горело всё, Найра спокойно допивала чай.
+                </p>
+                <p style="font-size:0.85em;">
+                    Однажды на монастырь напали разбойники. Найра вышла к ним одна, без оружия.
+                    Через минуту разбойники убежали, а настоятельница нашла её сидящей на ступенях
+                    с чашкой чая. На вопрос «Что произошло?» Найра ответила: «Ничего особенного».
+                    С тех пор её отправили в мир — «нести равновесие туда, где слишком шумно».
+                </p>
+                <p style="font-size:0.85em;">
+                    Теперь она с отрядом. Обычно спокойна, наблюдательна, печёт печенье и иногда
+                    говорит такое, от чего все падают. Её любимая фраза: «Я не молчу, я просто
+                    думаю. Есть разница».
+                </p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Вкладки (iPhone-friendly)
+    const tabButtons = document.querySelectorAll(".tab-btn");
+    const tabContents = {
+        stats: document.getElementById("tab-stats"),
+        inventory: document.getElementById("tab-inventory"),
+        abilities: document.getElementById("tab-abilities"),
+        buffs: document.getElementById("tab-buffs"),
+        story: document.getElementById("tab-story")
+    };
+
+    function switchTab(e) {
+        e.preventDefault();
+        const tab = this.getAttribute("data-tab");
+        tabButtons.forEach(b => b.classList.remove("active"));
+        this.classList.add("active");
+        Object.keys(tabContents).forEach(key => {
+            tabContents[key].classList.toggle("active", key === tab);
+        });
+    }
+
+    tabButtons.forEach(btn => {
+        btn.setAttribute("type", "button");
+        btn.addEventListener("touchstart", switchTab, { passive: false });
+        btn.addEventListener("click", switchTab);
+    });
+
+    // Фото
+    function updatePhoto() {
+        const url = document.getElementById('photoURL').value.trim();
+        if (url.length > 5) document.getElementById('charPhoto').src = url;
+    }
+
+    // HP
+    let hpCurrent = 24, hpMax = 24;
+    function updateHP() {
+        document.getElementById('hpCounter').textContent = hpCurrent + " / " + hpMax;
+        document.getElementById('hpBar').style.width = (hpCurrent / hpMax * 100) + "%";
+    }
+    function changeHP(d) {
+        hpCurrent = Math.max(0, Math.min(hpMax, hpCurrent + d));
+        updateHP();
+    }
+    updateHP();
+
+    // Ци
+    let mpCurrent = 3, mpMax = 3;
+    function updateMP() {
+        document.getElementById('mpCounter').textContent = mpCurrent + " / " + mpMax;
+        document.getElementById('mpBar').style.width = (mpCurrent / mpMax * 100) + "%";
+    }
+    function changeMP(d) {
+        mpCurrent = Math.max(0, Math.min(mpMax, mpCurrent + d));
+        updateMP();
+    }
+    updateMP();
+
+    // Способности
+    const abilities = {
+        1: { cost: 1, cd: 1, timer: 0 },
+        2: { cost: 2, cd: 2, timer: 0 },
+        3: { cost: 1, cd: 1, timer: 0 },
+        4: { cost: 2, cd: 3, timer: 0 }
+    };
+
+    function useAbility(id) {
+        const ab = abilities[id];
+        if (ab.timer > 0) return;
+        if (mpCurrent < ab.cost) return;
+        mpCurrent -= ab.cost;
+        updateMP();
+        ab.timer = ab.cd;
+        const btn = document.getElementById('btn' + id);
+        const cdLabel = document.getElementById('cd' + id);
+        btn.disabled = true;
+        cdLabel.textContent = "КД: " + ab.timer + " раунд(ов)";
+    }
+
+    function nextRound() {
+        Object.keys(abilities).forEach(key => {
+            const id = parseInt(key);
+            const ab = abilities[id];
+            if (ab.timer > 0) {
+                ab.timer -= 1;
+                const btn = document.getElementById('btn' + id);
+                const cdLabel = document.getElementById('cd' + id);
+                if (ab.timer <= 0) {
+                    ab.timer = 0;
+                    btn.disabled = false;
+                    cdLabel.textContent = "Готово";
+                } else {
+                    cdLabel.textContent = "КД: " + ab.timer + " раунд(ов)";
+                }
+            }
+        });
+    }
+
+    // Баффы
+    function toggleBuff(el) {
+        el.classList.toggle("active");
+    }
+</script>
+</body>
+</html>
